@@ -12,4 +12,5 @@ st.write(pd.DataFrame({
     'second column': [10, 20, 30, 40]
 }))
 
-st.map()
+myArray = np.array([[1,2,3],[4,5,6]])
+myArray
