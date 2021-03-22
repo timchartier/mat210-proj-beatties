@@ -25,3 +25,12 @@ st.area_chart(chart_data)
 
 # Chart data here
 chart_data
+
+st.video('https://www.youtube.com/watch?v=sK-MlWm7Iuc')
+
+
+"""
+# This is a markdown header
+Some markdown text here.
+
+"""
