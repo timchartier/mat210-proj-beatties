@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 from matplotlib import pyplot as plt
+import pydeck as pdk
 
 import streamlit.components.v1 as components
 
@@ -35,34 +36,32 @@ Some markdown text here.
 
 """
 
-grocery = pd.read_csv('./grocery-data/Grocery_Stores.csv').rename(columns={'X': 'longitude', 'Y':'latitude'})
+grocery = pd.read_csv('./grocery-data/Grocery_Stores.csv')
+grocery = grocery.rename(columns={'X': 'longitude', 'Y': 'latitude'})
 
+colNames = grocery.columns
+
+st.write("Hello world")
+st.write(colNames)
 
 st.pydeck_chart(pdk.Deck(
-...     map_style='mapbox://styles/mapbox/light-v9',
-...     initial_view_state=pdk.ViewState(
-...         latitude=37.76,
-...         longitude=-122.4,
-...         zoom=11,
-...         pitch=50,
-...     ),
-...     layers=[
-...         pdk.Layer(
-...            'HexagonLayer',
-...            data=grocert,
-...            get_position='[lon, lat]',
-...            radius=200,
-...            elevation_scale=4,
-...            elevation_range=[0, 1000],
-...            pickable=True,
-...            extruded=True,
-...         ),
-...         pdk.Layer(
-...             'ScatterplotLayer',
-...             data=grocert,
-...             get_position='[lon, lat]',
-...             get_color='[200, 30, 0, 160]',
-...             get_radius=200,
-...         ),
-...     ],
-... ))
+     map_style='mapbox://styles/mapbox/light-v9',
+     initial_view_state=pdk.ViewState(
+         latitude=37.76,
+         longitude=-122.4,
+         zoom=11,
+         pitch=50,
+     ),
+     layers=[
+         pdk.Layer(
+             'ScatterplotLayer',
+             data=grocery,
+             get_position=['longitude','latitude'],
+             get_color='[200, 30, 0, 160]',
+             get_radius=200,
+         ),
+     ],
+))
+
+st.write("trying again")
+
