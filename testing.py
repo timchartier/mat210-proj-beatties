@@ -34,3 +34,35 @@ st.video('https://www.youtube.com/watch?v=sK-MlWm7Iuc')
 Some markdown text here.
 
 """
+
+grocery = pd.read_csv('./grocery-data/Grocery_Stores.csv').rename(columns={'X': 'longitude', 'Y':'latitude'})
+
+
+st.pydeck_chart(pdk.Deck(
+...     map_style='mapbox://styles/mapbox/light-v9',
+...     initial_view_state=pdk.ViewState(
+...         latitude=37.76,
+...         longitude=-122.4,
+...         zoom=11,
+...         pitch=50,
+...     ),
+...     layers=[
+...         pdk.Layer(
+...            'HexagonLayer',
+...            data=grocert,
+...            get_position='[lon, lat]',
+...            radius=200,
+...            elevation_scale=4,
+...            elevation_range=[0, 1000],
+...            pickable=True,
+...            extruded=True,
+...         ),
+...         pdk.Layer(
+...             'ScatterplotLayer',
+...             data=grocert,
+...             get_position='[lon, lat]',
+...             get_color='[200, 30, 0, 160]',
+...             get_radius=200,
+...         ),
+...     ],
+... ))
