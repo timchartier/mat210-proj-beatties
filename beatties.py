@@ -53,7 +53,8 @@ st.pydeck_chart(pdk.Deck(
              lineWidthMinPixels=2,
              opacity=1,
              id='beatties-ford-road',
-             use_binary_transport=False
+             use_binary_transport=False,
+             extruded=True
          ),
          pdk.Layer(
              'TextLayer',
