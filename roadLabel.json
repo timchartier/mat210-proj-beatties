@@ -1,7 +1,7 @@
 [
   {
-    "label": "Beatties Ford Road",
-    "coordinates": [35.394031, -80.923563],
+    "name": "Beatties Ford Road",
+    "coordinates": [-80.99,35.394],
     "weight": 1
   }
 ]

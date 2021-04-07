@@ -3,6 +3,7 @@ import numpy as np
 import streamlit as st
 from matplotlib import pyplot as plt
 import pydeck as pdk
+from pydeck.types import String
 import geopandas as gpd
 
 import streamlit.components.v1 as components
@@ -16,16 +17,12 @@ st.video('https://www.youtube.com/watch?v=sK-MlWm7Iuc')
 grocery = pd.read_csv('./grocery-data/Grocery_Stores.csv')
 grocery = grocery.rename(columns={'X': 'longitude', 'Y': 'latitude'})
 
-colNames = grocery.columns
-
-st.write("Hello world")
-st.write(colNames)
-
 coords = grocery[['longitude', 'latitude']]
-avgLong = grocery['longitude'].median()
-avgLat = grocery['latitude'].median()
+medianLong = grocery['longitude'].median()
+medianLat = grocery['latitude'].median()
 
 beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
+roadLabel = pd.read_json("./roadLabel.json")
 
 st.write("""## Grocery stores in Mecklenburg County""")
 st.pydeck_chart(pdk.Deck(
@@ -43,6 +40,10 @@ st.pydeck_chart(pdk.Deck(
              get_position=['longitude','latitude'],
              get_color='[200, 30, 0, 160]',
              get_radius=200,
+             pickable=True,
+             extruded=True,
+            #  elevationScale=4,
+            #  elevationRange=[0,1000]
          ),
          pdk.Layer(
              'GeoJsonLayer',
@@ -53,6 +54,19 @@ st.pydeck_chart(pdk.Deck(
              opacity=1,
              id='beatties-ford-road',
              use_binary_transport=False
+         ),
+         pdk.Layer(
+             'TextLayer',
+             data=roadLabel,
+            id='label',
+            pickable=True,
+            get_size=16,
+            get_color=[1,1,1],
+            get_position="coordinates",
+            get_text="name",
+            get_angle=0,
+            get_text_anchor=String("middle"),
+            get_alignment_baseline=String("center")
          )
 
      ],
