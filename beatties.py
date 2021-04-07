@@ -3,6 +3,7 @@ import numpy as np
 import streamlit as st
 from matplotlib import pyplot as plt
 import pydeck as pdk
+import geopandas as gpd
 
 import streamlit.components.v1 as components
 
@@ -24,6 +25,8 @@ coords = grocery[['longitude', 'latitude']]
 avgLong = grocery['longitude'].median()
 avgLat = grocery['latitude'].median()
 
+beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
+
 st.write("""## Grocery stores in Mecklenburg County""")
 st.pydeck_chart(pdk.Deck(
      map_style='mapbox://styles/mapbox/light-v9',
@@ -41,6 +44,17 @@ st.pydeck_chart(pdk.Deck(
              get_color='[200, 30, 0, 160]',
              get_radius=200,
          ),
+         pdk.Layer(
+             'GeoJsonLayer',
+             data=beattiesGeoJson,
+             filled=True,
+             pickable=True,
+             lineWidthMinPixels=2,
+             opacity=1,
+             id='beatties-ford-road',
+             use_binary_transport=False
+         )
+
      ],
 ))
 
