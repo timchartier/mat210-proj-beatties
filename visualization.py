@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import plotly.express as px
 import streamlit as st
+import streamlit.components.v1 as comps
+
+st.set_page_config(layout="wide")
 
 # %% [markdown]
 # ## Import and clean data
@@ -114,3 +117,8 @@ fig2 = px.bar(merged,x="Household_Income_2018",y="order",orientation="h",
     labels=dict(Household_Income_2018="Household Income (2018)",order="NPA"))
 fig2.update_yaxes(autorange="reversed",ticktext=selected.NPA.tolist(),tickvals=selected.order.to_list())
 st.plotly_chart(fig2)
+
+comps.html("""
+<iframe src="https://www.google.com/maps/d/u/0/embed?mid=10yFAFu1L3DirUntm6-A3b7FOweTFr95b" width="600" height="1600"></iframe>
+""",height=1600,width=600)
+
