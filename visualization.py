@@ -119,6 +119,6 @@ fig2.update_yaxes(autorange="reversed",ticktext=selected.NPA.tolist(),tickvals=s
 st.plotly_chart(fig2)
 
 comps.html("""
-<iframe src="https://www.google.com/maps/d/u/0/embed?mid=10yFAFu1L3DirUntm6-A3b7FOweTFr95b" width="600" height="1600"></iframe>
+<iframe src="https://www.google.com/maps/d/u/0/embed?mid=10yFAFu1L3DirUntm6-A3b7FOweTFr95b&amp;z=13&ll=35.335%2C-80.885" width="600" height="1600"></iframe>
 """,height=1600,width=600)
 
