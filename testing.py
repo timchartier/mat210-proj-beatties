@@ -21,9 +21,13 @@ dataFrames = {
 def getDataFrame(topic):
     return pd.read_pickle('./qol-data/pickles/{}.pkl'.format(topic))
 
+# Read in master data frame from pickle file
+master = pd.read_pickle('./qol-data/master.pkl')
 
 df = getDataFrame(dataFrames['Economy'])
 df[['Household_Income_2017','Household_Income_2018']] = df[['Household_Income_2017','Household_Income_2018']].astype(float)
+master[['Household_Income_2017','Household_Income_2018']] = master[['Household_Income_2017','Household_Income_2018']].astype(float)
 
 
-st.write(df)
+
+st.write(master)
