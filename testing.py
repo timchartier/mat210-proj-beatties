@@ -4,6 +4,8 @@ import plotly.figure_factory as ff
 import pandas as pd
 import numpy as np
 import os
+from sklearn.preprocessing import normalize
+from sklearn.cluster import KMeans
 
 
 dataFrames = {
@@ -45,6 +47,8 @@ description = metadata[metadata['Long_Name']
                        == variable]['Long_Description'].values[0]
 st.write(description)
 
+st.write(master[variable])
+
 fig2 = px.bar(master, x=variable, y="order", orientation="h",
               labels=dict(variable=formatChoice(variable), order="NPA"))
 fig2.update_yaxes(autorange="reversed",
@@ -70,3 +74,24 @@ fig3.update_yaxes(autorange="reversed",
                   ticktext=data.NPA.tolist(), tickvals=data.order.to_list())
 
 st.plotly_chart(fig3)
+
+fieldList = master.columns
+fields2017 = list(fieldList[fieldList.to_series().str.endswith(
+    '2017') & ~fieldList.to_series().str.contains('moe')])
+
+data = master[fields2017].dropna(axis='columns')
+
+clusteringFields = st.multiselect(label='Select fields for clustering',
+                                  options=data.columns, format_func=lambda x: x.replace('_', ' '))
+
+selectedData = data[clusteringFields]
+scaled = normalize(selectedData, axis=0)
+scaled = pd.DataFrame(scaled, columns=selectedData.columns)
+
+st.write(selectedData)
+st.write(scaled)
+
+kmeansClusters = KMeans(n_clusters=2)
+kmeansClusters.fit(scaled)
+
+st.write(kmeansClusters.labels_)
