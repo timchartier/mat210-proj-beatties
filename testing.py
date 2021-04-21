@@ -23,15 +23,14 @@ def getDataFrame(topic):
 
 # Read in master data frame from pickle file
 master = pd.read_pickle('./qol-data/master.pkl')
+# Read in variable metadata from csv file
 metadata = pd.read_csv('./qol-data/csvFiles/metadata.csv')
 
 df = getDataFrame(dataFrames['Economy'])
 df[['Household_Income_2017','Household_Income_2018']] = df[['Household_Income_2017','Household_Income_2018']].astype(float)
 master[['Household_Income_2017','Household_Income_2018']] = master[['Household_Income_2017','Household_Income_2018']].astype(float)
 
-
 formatChoice = lambda x: x.replace('_',' ')
-
 
 st.markdown('## Dynamic Chart')
 variable = st.selectbox(label="Pick a variable", options=list(master.columns),format_func=lambda x: x.replace('_',' '))
