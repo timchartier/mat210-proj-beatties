@@ -28,6 +28,4 @@ df = getDataFrame(dataFrames['Economy'])
 df[['Household_Income_2017','Household_Income_2018']] = df[['Household_Income_2017','Household_Income_2018']].astype(float)
 master[['Household_Income_2017','Household_Income_2018']] = master[['Household_Income_2017','Household_Income_2018']].astype(float)
 
-
-
 st.write(master)
