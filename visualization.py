@@ -7,6 +7,11 @@ import numpy as np
 import plotly.express as px
 import streamlit as st
 import streamlit.components.v1 as comps
+import geopandas as gpd
+import fiona
+from shapely.geometry import Polygon, MultiPolygon, shape
+from descartes import PolygonPatch
+from matplotlib.collections import PatchCollection
 
 st.set_page_config(layout="wide")
 
@@ -22,63 +27,73 @@ metadata = metadata.dropna()
 
 
 # %%
-characterRaw = pd.read_csv('qol-data/csvFiles/character.csv', header=1).dropna(thresh=10)
+characterRaw = pd.read_csv(
+    'qol-data/csvFiles/character.csv', header=1).dropna(thresh=10)
 characterRaw = characterRaw[characterRaw.NPA.notnull()]
 characterRaw.NPA = characterRaw.NPA.astype(int)
 characterRaw
 
 
 # %%
-economyRaw = pd.read_csv('qol-data/csvFiles/economy.csv', header=1).dropna(thresh=10)
+economyRaw = pd.read_csv('qol-data/csvFiles/economy.csv',
+                         header=1).dropna(thresh=10)
 economyRaw = economyRaw[economyRaw.NPA.notnull()]
 economyRaw.NPA = economyRaw.NPA.astype(int)
 economyRaw.info()
 
 
 # %%
-educationRaw = pd.read_csv('qol-data/csvFiles/education.csv',header=1).dropna(thresh=10)
+educationRaw = pd.read_csv(
+    'qol-data/csvFiles/education.csv', header=1).dropna(thresh=10)
 educationRaw = educationRaw[educationRaw.NPA.notnull()]
 educationRaw.NPA = educationRaw.NPA.astype(int)
 
 
 # %%
-engagementRaw = pd.read_csv('qol-data/csvFiles/engagement.csv',header=1).dropna(thresh=10)
+engagementRaw = pd.read_csv(
+    'qol-data/csvFiles/engagement.csv', header=1).dropna(thresh=10)
 engagementRaw = engagementRaw[engagementRaw.NPA.notnull()]
 engagementRaw.NPA = engagementRaw.NPA.astype(int)
 
 
 # %%
-environmentRaw = pd.read_csv('qol-data/csvFiles/environment.csv',header=1).dropna(thresh=10)
+environmentRaw = pd.read_csv(
+    'qol-data/csvFiles/environment.csv', header=1).dropna(thresh=10)
 environmentRaw = environmentRaw[environmentRaw.NPA.notnull()]
 environmentRaw.NPA = environmentRaw.NPA.astype(int)
 
 
 # %%
-healthRaw = pd.read_csv('qol-data/csvFiles/health.csv',header=1).dropna(thresh=10)
+healthRaw = pd.read_csv('qol-data/csvFiles/health.csv',
+                        header=1).dropna(thresh=10)
 healthRaw = healthRaw[healthRaw.NPA.notnull()]
 healthRaw.NPA = healthRaw.NPA.astype(int)
 
 
 # %%
-housingRaw = pd.read_csv('qol-data/csvFiles/housing.csv',header=1).dropna(thresh=10)
+housingRaw = pd.read_csv('qol-data/csvFiles/housing.csv',
+                         header=1).dropna(thresh=10)
 housingRaw = housingRaw[housingRaw.NPA.notnull()]
 housingRaw.NPA = housingRaw.NPA.astype(int)
 
 
 # %%
-safetyRaw = pd.read_csv('qol-data/csvFiles/safety.csv',header=1).dropna(thresh=10)
+safetyRaw = pd.read_csv('qol-data/csvFiles/safety.csv',
+                        header=1).dropna(thresh=10)
 safetyRaw = safetyRaw[safetyRaw.NPA.notnull()]
 safetyRaw.NPA = safetyRaw.NPA.astype(int)
 
 
 # %%
-transportationRaw = pd.read_csv('qol-data/csvFiles/transportation.csv',header=1).dropna(thresh=10)
+transportationRaw = pd.read_csv(
+    'qol-data/csvFiles/transportation.csv', header=1).dropna(thresh=10)
 transportationRaw = transportationRaw[transportationRaw.NPA.notnull()]
 transportationRaw.NPA = transportationRaw.NPA.astype(int)
 
 
 # %%
-economyRaw.Household_Income_2018 = economyRaw.Household_Income_2018.str.replace(',','').replace('+','')
+economyRaw.Household_Income_2018 = economyRaw.Household_Income_2018.str.replace(
+    ',', '').replace('+', '')
 
 
 # %%
@@ -100,7 +115,8 @@ selected
 
 # %%
 filtered = economyRaw[economyRaw.NPA.isin(selected["NPA"])]
-merged = pd.merge(selected,filtered,left_on="NPA", right_on="NPA",how="inner")
+merged = pd.merge(selected, filtered, left_on="NPA",
+                  right_on="NPA", how="inner")
 merged
 print(selected.NPA.to_list())
 
@@ -108,17 +124,38 @@ merged["Household_Income_2018"] = merged["Household_Income_2018"].astype(float)
 
 # %%
 
-fig = px.bar(merged,x="Public_Nutrition_Assistance_2018",y="order",orientation="h",labels=dict(Public_Nutrition_Assistance_2018="FNS Percentage (2018)",order="NPA"))
-fig.update_yaxes(autorange="reversed",ticktext=selected.NPA.to_list(),tickvals=selected.order.to_list())
+fig = px.bar(merged, x="Public_Nutrition_Assistance_2018", y="order", orientation="h",
+             labels=dict(Public_Nutrition_Assistance_2018="FNS Percentage (2018)", order="NPA"))
+fig.update_yaxes(autorange="reversed", ticktext=selected.NPA.to_list(
+), tickvals=selected.order.to_list())
 
 st.plotly_chart(fig)
 
-fig2 = px.bar(merged,x="Household_Income_2018",y="order",orientation="h",
-    labels=dict(Household_Income_2018="Household Income (2018)",order="NPA"))
-fig2.update_yaxes(autorange="reversed",ticktext=selected.NPA.tolist(),tickvals=selected.order.to_list())
+fig2 = px.bar(merged, x="Household_Income_2018", y="order", orientation="h",
+              labels=dict(Household_Income_2018="Household Income (2018)", order="NPA"))
+fig2.update_yaxes(autorange="reversed", ticktext=selected.NPA.tolist(
+), tickvals=selected.order.to_list())
 st.plotly_chart(fig2)
 
 comps.html("""
 <iframe src="https://www.google.com/maps/d/u/0/embed?mid=10yFAFu1L3DirUntm6-A3b7FOweTFr95b&amp;z=13&ll=35.335%2C-80.885" width="600" height="1600"></iframe>
-""",height=1600,width=600)
+""", height=1600, width=600)
 
+
+# More mapping stuff
+raw = fiona.open('./qol-data/NPA_2014_meck.shp')
+st.write(list(raw)[0]['geometry']['coordinates'])
+
+mp = MultiPolygon([shape(pol['geometry']) for pol in raw])
+
+fig, ax = plt.subplots()
+minx, miny, maxx, maxy = mp.bounds
+w, h = maxx - minx, maxy - miny
+ax.set_xlim(minx, maxx)
+ax.set_ylim(miny, maxy)
+ax.set_aspect(1)
+patches = []
+for idx, p in enumerate(mp):
+    patches.append(PolygonPatch(p, fc="#FFFFFF"))
+ax.add_collection(PatchCollection(patches, match_original=True))
+st.pyplot(fig)
