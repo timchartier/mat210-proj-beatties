@@ -11,6 +11,7 @@ from sklearn.preprocessing import normalize
 from sklearn.cluster import KMeans
 import pydeck as pdk
 from pydeck.types import String
+import math
 
 
 dataFrames = {
@@ -82,13 +83,18 @@ fields2017 = list(fieldList[fieldList.to_series().str.endswith(
 
 data = master[fields2017].dropna(axis='columns')
 
+# Streamlit multiselect to pick fields for clustering; => Default ["White_Population_2020"]
 clusteringFields = st.multiselect(label='Select fields for clustering',
                                   options=list(data.columns),
                                   format_func=lambda x: x.replace('_', ' '),
                                   default=["White_Population_2017"])
+numberOfClusters = st.number_input(
+    label="Number of Clusters", min_value=2, max_value=5, value=2)
 
+# If no fields selected, give error
 if len(clusteringFields) == 0:
     st.error("Please select one or more fields for clustering NPAs.")
+# Else display the clusters and map
 else:
 
     selectedData = data[clusteringFields]
@@ -97,7 +103,7 @@ else:
 
     # st.write(selectedData)
 
-    kmeansClusters = KMeans(n_clusters=2, random_state=42)
+    kmeansClusters = KMeans(n_clusters=numberOfClusters, random_state=42)
     kmeansClusters.fit(scaled)
 
     master['cluster'] = kmeansClusters.labels_ + 1
@@ -105,13 +111,19 @@ else:
 
     df2 = pd.DataFrame()
 
+    palette = [
+        [255, 75, 75, 100],
+        [255, 191, 0, 100],
+        [47, 114, 255, 100],
+        [64, 255, 112, 100],
+        [186, 73, 255, 100]
+    ]
+
     def getColor(x):
-        if x == 1:
-            return [211, 19, 19, 100]
-        elif x == 2:
-            return [30, 65, 204, 100]
-        else:
+        if math.isnan(x):
             return [0, 0, 0, 0]
+        else:
+            return palette[int(x-1)]
 
     # json = pd.read_json('./qol-data/npa.json')
     jsonData = json.load(open('./qol-data/npa.json'))
