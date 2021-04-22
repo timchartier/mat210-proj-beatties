@@ -74,94 +74,104 @@ fig3.update_yaxes(autorange="reversed",
 
 st.plotly_chart(fig3)
 
+
+st.markdown("## Clustering NPAs")
 fieldList = master.columns
 fields2017 = list(fieldList[fieldList.to_series().str.endswith(
     '2017') & ~fieldList.to_series().str.contains('moe')])
 
 data = master[fields2017].dropna(axis='columns')
 
-clusteringFields = list(data.columns)[3:5]
 clusteringFields = st.multiselect(label='Select fields for clustering',
-                                  options=data.columns, format_func=lambda x: x.replace('_', ' '))
+                                  options=list(data.columns),
+                                  format_func=lambda x: x.replace('_', ' '),
+                                  default=["White_Population_2017"])
 
-selectedData = data[clusteringFields]
-scaled = normalize(selectedData, axis=0)
-scaled = pd.DataFrame(scaled, columns=selectedData.columns)
+if len(clusteringFields) == 0:
+    st.error("Please select one or more fields for clustering NPAs.")
+else:
 
-st.write(selectedData)
+    selectedData = data[clusteringFields]
+    scaled = normalize(selectedData, axis=0)
+    scaled = pd.DataFrame(scaled, columns=selectedData.columns)
 
-kmeansClusters = KMeans(n_clusters=2)
-kmeansClusters.fit(scaled)
+    # st.write(selectedData)
 
-master['cluster'] = kmeansClusters.labels_ + 1
+    kmeansClusters = KMeans(n_clusters=2, random_state=42)
+    kmeansClusters.fit(scaled)
 
+    master['cluster'] = kmeansClusters.labels_ + 1
+    master['cluster'] = master['cluster'].astype(int)
 
-df2 = pd.DataFrame()
+    df2 = pd.DataFrame()
 
+    def getColor(x):
+        if x == 1:
+            return [211, 19, 19, 100]
+        elif x == 2:
+            return [30, 65, 204, 100]
+        else:
+            return [0, 0, 0, 0]
 
-def getColor(x):
-    if x == 1:
-        return [211, 19, 19, 100]
-    elif x == 2:
-        return [30, 65, 204, 100]
-    else:
-        return [0, 0, 0, 0]
+    # json = pd.read_json('./qol-data/npa.json')
+    jsonData = json.load(open('./qol-data/npa.json'))
 
+    df2['coordinates'] = [feature['geometry']['coordinates']
+                          for feature in jsonData['features']]
+    df2['NPA'] = [int(feature['properties']['id'])
+                  for feature in jsonData['features']]
+    df2 = pd.merge(df2, master[["NPA", "cluster"]], on="NPA", how="left")
+    df2['fill_color'] = df2['cluster'].map(getColor)
+    df2['cluster_tooltip'] = df2['cluster'].map(
+        lambda x: 'Cluster {}'.format(int(x)) if x > 0 else '')
+    df2 = df2.drop(columns=['cluster'])
 
-# json = pd.read_json('./qol-data/npa.json')
-jsonData = json.load(open('./qol-data/npa.json'))
+    st.markdown('### Cluster 1')
+    st.text("NPA: " + str(list(master[master['cluster'] == 1]['NPA'])))
+    st.markdown("### Cluster 2")
+    st.text("NPA: " + str(list(master[master['cluster'] == 2]['NPA'])))
 
-df2['coordinates'] = [feature['geometry']['coordinates']
-                      for feature in jsonData['features']]
-df2['NPA'] = [int(feature['properties']['id'])
-              for feature in jsonData['features']]
-df2 = pd.merge(df2, master[["NPA", "cluster"]], on="NPA", how="left")
-df2['fill_color'] = df2['cluster'].map(getColor)
-df2 = df2.drop(columns=['cluster'])
+    view_state = pdk.ViewState(
+        **{"latitude": 35.33, "longitude": -80.89, "zoom": 10.50, "maxZoom": 22, "pitch": 0, "bearing": 0}
+    )
 
-view_state = pdk.ViewState(
-    **{"latitude": 35.278322, "longitude": -80.864879, "zoom": 10.5, "maxZoom": 22, "pitch": 0, "bearing": 0}
-)
+    beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
 
-beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
+    polygon_layer = pdk.Layer(
+        "PolygonLayer",
+        df2,
+        opacity=0.8,
+        stroked=True,
+        get_polygon="coordinates",
+        filled=True,
+        extruded=False,
+        wireframe=True,
+        get_fill_color="fill_color",
+        get_line_color=[0, 0, 0],
+        lineWidthMinPixels=1,
+        auto_highlight=True,
+        pickable=True,
+    )
 
+    road_layer = pdk.Layer(
+        'GeoJsonLayer',
+        data=beattiesGeoJson,
+        filled=True,
+        pickable=False,
+        lineWidthMinPixels=2,
+        opacity=1,
+        id='beatties-ford-road',
+        use_binary_transport=False,
+        extruded=True
+    )
 
-polygon_layer = pdk.Layer(
-    "PolygonLayer",
-    df2,
-    opacity=0.8,
-    stroked=True,
-    get_polygon="coordinates",
-    filled=True,
-    extruded=False,
-    wireframe=True,
-    get_fill_color="fill_color",
-    get_line_color=[0, 0, 0],
-    lineWidthMinPixels=1,
-    auto_highlight=True,
-    pickable=True,
-)
+    tooltip = {"html": "<b>NPA:</b> {NPA} <br /><b>{cluster_tooltip}</b>"}
 
-road_layer = pdk.Layer(
-    'GeoJsonLayer',
-    data=beattiesGeoJson,
-    filled=True,
-    pickable=False,
-    lineWidthMinPixels=2,
-    opacity=1,
-    id='beatties-ford-road',
-    use_binary_transport=False,
-    extruded=True
-)
+    deck = pdk.Deck(
+        layers=[polygon_layer, road_layer],
+        map_style='mapbox://styles/mapbox/light-v9',
+        initial_view_state=view_state,
+        tooltip=tooltip
+    )
 
-tooltip = {"html": "<b>NPA:</b> {NPA}"}
-
-
-deck = pdk.Deck(
-    layers=[polygon_layer, road_layer],
-    map_style='mapbox://styles/mapbox/light-v9',
-    initial_view_state=view_state,
-    tooltip=tooltip
-)
-
-st.pydeck_chart(deck)
+    st.pydeck_chart(deck)
