@@ -8,10 +8,6 @@ import plotly.express as px
 import streamlit as st
 import streamlit.components.v1 as comps
 import geopandas as gpd
-import fiona
-from shapely.geometry import Polygon, MultiPolygon, shape
-from descartes import PolygonPatch
-from matplotlib.collections import PatchCollection
 
 st.set_page_config(layout="wide")
 
@@ -140,22 +136,3 @@ st.plotly_chart(fig2)
 comps.html("""
 <iframe src="https://www.google.com/maps/d/u/0/embed?mid=10yFAFu1L3DirUntm6-A3b7FOweTFr95b&amp;z=13&ll=35.335%2C-80.885" width="600" height="1600"></iframe>
 """, height=1600, width=600)
-
-
-# More mapping stuff
-raw = fiona.open('./qol-data/NPA_2014_meck.shp')
-st.write(list(raw)[0]['geometry']['coordinates'])
-
-mp = MultiPolygon([shape(pol['geometry']) for pol in raw])
-
-fig, ax = plt.subplots()
-minx, miny, maxx, maxy = mp.bounds
-w, h = maxx - minx, maxy - miny
-ax.set_xlim(minx, maxx)
-ax.set_ylim(miny, maxy)
-ax.set_aspect(1)
-patches = []
-for idx, p in enumerate(mp):
-    patches.append(PolygonPatch(p, fc="#FFFFFF"))
-ax.add_collection(PatchCollection(patches, match_original=True))
-st.pyplot(fig)

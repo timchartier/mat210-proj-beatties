@@ -18,13 +18,17 @@ st.video('https://www.youtube.com/watch?v=sK-MlWm7Iuc')
 
 grocery = pd.read_csv('./grocery-data/Grocery_Stores.csv')
 grocery = grocery.rename(columns={'X': 'longitude', 'Y': 'latitude'})
-
+grocery = grocery[['longitude', 'latitude', 'Name']]
 coords = grocery[['longitude', 'latitude']]
+
+st.write(grocery)
 medianLong = grocery['longitude'].median()
 medianLat = grocery['latitude'].median()
 
 beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
 roadLabel = pd.read_json("./roadLabel.json")
+
+tooltip = {"html": "<b>Store:</b> {Name}"}
 
 st.write("""## Grocery stores in Mecklenburg County""")
 st.pydeck_chart(pdk.Deck(
@@ -38,7 +42,7 @@ st.pydeck_chart(pdk.Deck(
     layers=[
         pdk.Layer(
             'ScatterplotLayer',
-            data=coords,
+            data=grocery,
             get_position=['longitude', 'latitude'],
             get_color='[200, 30, 0, 160]',
             get_radius=200,
@@ -51,7 +55,7 @@ st.pydeck_chart(pdk.Deck(
             'GeoJsonLayer',
             data=beattiesGeoJson,
             filled=True,
-            pickable=True,
+            pickable=False,
             lineWidthMinPixels=2,
             opacity=1,
             id='beatties-ford-road',
@@ -62,7 +66,7 @@ st.pydeck_chart(pdk.Deck(
             'TextLayer',
             data=roadLabel,
             id='label',
-            pickable=True,
+            pickable=False,
             get_size=16,
             get_color=[1, 1, 1],
             get_position="coordinates",
@@ -73,6 +77,7 @@ st.pydeck_chart(pdk.Deck(
         )
 
     ],
+    tooltip=tooltip
 ))
 
 components.html("""

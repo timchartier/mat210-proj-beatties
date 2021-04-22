@@ -1,11 +1,21 @@
+# Module imports
 import streamlit as st
 import plotly.express as px
 import plotly.figure_factory as ff
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import json
 import os
 from sklearn.preprocessing import normalize
 from sklearn.cluster import KMeans
+import fiona
+from shapely.geometry import Polygon, MultiPolygon, shape
+from descartes import PolygonPatch
+from matplotlib.collections import PatchCollection
+import pydeck as pdk
+from pydeck.types import String
+import geopandas as gpd
 
 
 dataFrames = {
@@ -30,19 +40,13 @@ master = pd.read_pickle('./qol-data/master.pkl')
 # Read in variable metadata from csv file
 metadata = pd.read_csv('./qol-data/csvFiles/metadata.csv')
 
-df = getDataFrame(dataFrames['Economy'])
-df[['Household_Income_2017', 'Household_Income_2018']] = df[[
-    'Household_Income_2017', 'Household_Income_2018']].astype(float)
-master[['Household_Income_2017', 'Household_Income_2018']] = master[[
-    'Household_Income_2017', 'Household_Income_2018']].astype(float)
-
 
 def formatChoice(x): return x.replace('_', ' ')
 
 
 st.markdown('## Dynamic Chart')
 variable = st.selectbox(label="Pick a variable", options=list(
-    master.columns), format_func=lambda x: x.replace('_', ' '))
+    master.columns), format_func=lambda x: x.replace('_', ' '), index=5)
 description = metadata[metadata['Long_Name']
                        == variable]['Long_Description'].values[0]
 st.write(description)
@@ -81,6 +85,7 @@ fields2017 = list(fieldList[fieldList.to_series().str.endswith(
 
 data = master[fields2017].dropna(axis='columns')
 
+clusteringFields = list(data.columns)[3:5]
 clusteringFields = st.multiselect(label='Select fields for clustering',
                                   options=data.columns, format_func=lambda x: x.replace('_', ' '))
 
@@ -89,9 +94,85 @@ scaled = normalize(selectedData, axis=0)
 scaled = pd.DataFrame(scaled, columns=selectedData.columns)
 
 st.write(selectedData)
-st.write(scaled)
 
 kmeansClusters = KMeans(n_clusters=2)
 kmeansClusters.fit(scaled)
 
-st.write(kmeansClusters.labels_)
+master['cluster'] = kmeansClusters.labels_ + 1
+
+
+df2 = pd.DataFrame()
+# More mapping stuff
+raw = fiona.open('./qol-data/NPA_2014_meck.shp')
+
+
+def getColor(x):
+    if x == 1:
+        return [211, 19, 19, 100]
+    elif x == 2:
+        return [30, 65, 204, 100]
+    else:
+        return [0, 0, 0, 0]
+
+
+for row in list(raw):
+    row['geometry']['coordinates'][0] = map(
+        list, row['geometry']['coordinates'][0])
+
+# json = pd.read_json('./qol-data/npa.json')
+jsonData = json.load(open('./qol-data/npa.json'))
+
+df2['coordinates'] = [feature['geometry']['coordinates']
+                      for feature in jsonData['features']]
+df2['NPA'] = [int(feature['properties']['id'])
+              for feature in jsonData['features']]
+df2 = pd.merge(df2, master[["NPA", "cluster"]], on="NPA", how="left")
+df2['fill_color'] = df2['cluster'].map(getColor)
+df2 = df2.drop(columns=['cluster'])
+
+view_state = pdk.ViewState(
+    **{"latitude": 35.278322, "longitude": -80.864879, "zoom": 10.5, "maxZoom": 22, "pitch": 0, "bearing": 0}
+)
+
+beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
+
+
+polygon_layer = pdk.Layer(
+    "PolygonLayer",
+    df2,
+    opacity=0.8,
+    stroked=True,
+    get_polygon="coordinates",
+    filled=True,
+    extruded=False,
+    wireframe=True,
+    get_fill_color="fill_color",
+    get_line_color=[0, 0, 0],
+    lineWidthMinPixels=1,
+    auto_highlight=True,
+    pickable=True,
+)
+
+road_layer = pdk.Layer(
+    'GeoJsonLayer',
+    data=beattiesGeoJson,
+    filled=True,
+    pickable=False,
+    lineWidthMinPixels=2,
+    opacity=1,
+    id='beatties-ford-road',
+    use_binary_transport=False,
+    extruded=True
+)
+
+tooltip = {"html": "<b>NPA:</b> {NPA}"}
+
+
+deck = pdk.Deck(
+    layers=[polygon_layer, road_layer],
+    map_style='mapbox://styles/mapbox/light-v9',
+    initial_view_state=view_state,
+    tooltip=tooltip
+)
+
+st.pydeck_chart(deck)
