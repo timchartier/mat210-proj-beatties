@@ -9,13 +9,8 @@ import json
 import os
 from sklearn.preprocessing import normalize
 from sklearn.cluster import KMeans
-import fiona
-from shapely.geometry import Polygon, MultiPolygon, shape
-from descartes import PolygonPatch
-from matplotlib.collections import PatchCollection
 import pydeck as pdk
 from pydeck.types import String
-import geopandas as gpd
 
 
 dataFrames = {
@@ -102,8 +97,6 @@ master['cluster'] = kmeansClusters.labels_ + 1
 
 
 df2 = pd.DataFrame()
-# More mapping stuff
-raw = fiona.open('./qol-data/NPA_2014_meck.shp')
 
 
 def getColor(x):
@@ -114,10 +107,6 @@ def getColor(x):
     else:
         return [0, 0, 0, 0]
 
-
-for row in list(raw):
-    row['geometry']['coordinates'][0] = map(
-        list, row['geometry']['coordinates'][0])
 
 # json = pd.read_json('./qol-data/npa.json')
 jsonData = json.load(open('./qol-data/npa.json'))
