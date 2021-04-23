@@ -187,3 +187,57 @@ else:
     )
 
     st.pydeck_chart(deck)
+
+    colors2 = [
+        [255, 255, 255, 0],
+        [255, 75, 75, 255]
+    ]
+
+    housingData = pd.read_pickle('./qol-data/pickles/housing.pkl')
+    housingData = housingData[[
+        'NPA', 'Home_Sales_Price_2015']]
+    housingData['colorIndex'] = 1
+    st.write(housingData)
+    df3 = pd.DataFrame()
+    df3['NPA'] = [int(feature['properties']['id'])
+                  for feature in jsonData['features']]
+    df3['coordinates'] = [feature['geometry']['coordinates']
+                          for feature in jsonData['features']]
+    st.write(df3)
+    df3 = pd.merge(df3, housingData, on="NPA", how="outer").fillna(0)
+    df3['fill_color'] = df3['colorIndex'].map(lambda x: colors2[int(x)])
+
+    st.write(df3)
+
+    housing_price_layer = pdk.Layer(
+        'PolygonLayer',
+        data=df3,
+        get_polygon='coordinates',
+        opacity=1,
+        stroked=True,
+        filled=True,
+        extruded=True,
+        wireframe=True,
+        get_elevation="Home_Sales_Price_2015",
+        get_line_color=[0, 0, 0],
+        get_fill_color="fill_color",
+        lineWidthMinPixels=1,
+        pickable=True,
+        elevation_scale=.005
+    )
+
+    tooltip = {
+        "html": "<b> NPA: {NPA} </b><br/><b>Home Sales Price 2015: ${Home_Sales_Price_2015}</b>"
+    }
+
+    view_state2 = pdk.ViewState(
+        **{"latitude": 35.33, "longitude": -80.89, "zoom": 10.50, "maxZoom": 22, "pitch": 45, "bearing": 0}
+    )
+    deck2 = pdk.Deck(
+        layers=[housing_price_layer],
+        map_style='mapbox://styles/mapbox/light-v9',
+        initial_view_state=view_state2,
+        tooltip=tooltip
+    )
+
+    st.pydeck_chart(deck2)
