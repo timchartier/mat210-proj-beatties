@@ -15,17 +15,17 @@ import math
 
 
 def run():
-    dataFrames = {
-        'Character': 'character',
-        'Economy': 'economy',
-        'Education': 'education',
-        'Engagement': 'engagement',
-        'Environment': 'environment',
-        'Health': 'health',
-        'Housing': 'housing',
-        'Safety': 'safety',
-        'Transportation': 'transportation'
-    }
+
+    st.title('Clustering neighborhoods along Beatties Ford Road')
+    st.markdown("""
+    Here, we cluster Neighborhood Profile Areas (NPAs) according to characteristics of your choosing.
+
+    As defined by the Quality of Life Study:
+
+    > *Neighborhood Profile Areas (NPAs) are geographic areas used for the organization and presentation of data in the Quality of Life Study.
+    The boundaries were developed with community input and are based on one or more Census block groups.*
+
+    """)
 
     # Read in master data frame from pickle file
     master = pd.read_pickle('./qol-data/master.pkl')
@@ -41,7 +41,7 @@ def run():
                            == variable]['Long_Description'].values[0]
     st.write(description)
 
-    st.write(master[variable])
+    # st.write(master[variable])
 
     fig2 = px.bar(master, x=variable, y="order", orientation="h",
                   labels=dict(variable=formatChoice(variable), order="NPA"))
