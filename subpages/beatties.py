@@ -9,9 +9,7 @@ import geopandas as gpd
 import streamlit.components.v1 as components
 
 def run():
-
-    st.set_page_config(page_title="Beatties Ford Road")
-
+    
     st.title('Beatties Ford Road Project')
 
 
