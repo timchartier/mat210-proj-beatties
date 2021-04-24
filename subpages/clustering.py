@@ -159,8 +159,6 @@ def run():
         summary = summary[['Cluster'] + clusteringFields]
 
         def getSummaryColor(row):
-            print(type(row.Cluster))
-            print(row.Cluster.split(' '))
             ind = int(row.Cluster.split(' ')[1]) - 1
             colorCode = palette[ind]
             return ['background-color: rgba({},{},{},.3)'.format(colorCode[0], colorCode[1], colorCode[2], colorCode[3])]*(1+len(clusteringFields))
