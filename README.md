@@ -15,9 +15,18 @@ Also at https://share.streamlit.io/wesmith4/mat210-proj-beatties/main/beatties.p
 
 _Instructions for bash terminal_
 
-1. Clone the repository to your desktop: `$ git clone https://github.com/wesmith4/mat210-proj-beatties.git`
-2. Install the requirements: `$ pip install -r requirements.txt`
-3. Start a Streamlit development server: `$ streamlit run FILE_NAME.py`
+1. Clone the repository to your desktop: 
+```shell
+$ git clone https://github.com/wesmith4/mat210-proj-beatties.git
+```
+2. Install the requirements:
+```shell
+$ pip install -r requirements.txt
+```
+3. Start a Streamlit development server:
+```shell
+$ streamlit run FILE_NAME.py
+```
 
 ## Streamlit documentation
 
