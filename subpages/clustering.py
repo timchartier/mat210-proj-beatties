@@ -1,9 +1,9 @@
 # Module imports
-from altair.vegalite.v4.api import value
+# from altair.vegalite.v4.api import value
 import streamlit as st
 import plotly.express as px
-import plotly.figure_factory as ff
-import matplotlib.pyplot as plt
+# import plotly.figure_factory as ff
+# import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import json
