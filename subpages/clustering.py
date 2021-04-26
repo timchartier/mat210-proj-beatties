@@ -33,13 +33,16 @@ def run():
     # Read in variable metadata from csv file
     metadata = pd.read_csv('./qol-data/csvFiles/metadata.csv')
 
+    # Read in metadata lookup file
+    variableLookup = pd.read_csv('./qol-data/variableLookup.csv')
+
     def formatChoice(x): return x.replace('_', ' ')
 
     st.markdown('## Dynamic Chart')
     variable = st.selectbox(label="Pick a variable", options=list(
         master.columns), format_func=lambda x: x.replace('_', ' '), index=5)
-    description = metadata[metadata['Long_Name']
-                           == variable]['Long_Description'].values[0]
+    varCode = variableLookup[variableLookup['name'] == variable]['code'].values[0]
+    description = metadata[metadata['Short _Name'] == varCode]['Long_Description'].values[0]
     st.write(description)
 
     # st.write(master[variable])
@@ -93,8 +96,8 @@ def run():
                                                      "All_Other_Races_2017"])
         with st.beta_expander("Variable Descriptions"):
             for var in clusteringFields:
-                description = metadata[metadata['Long_Name']
-                                       == var]['Long_Description'].values[0]
+                varCode = variableLookup[variableLookup['name'] == var]['code'].values[0]
+                description = metadata[metadata['Short _Name'] == varCode]['Long_Description'].values[0]
                 st.markdown("""
                 - `{}`: {}
                 """.format(var, description))
