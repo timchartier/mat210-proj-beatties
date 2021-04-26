@@ -24,6 +24,7 @@ def run():
     st.write(grocery)
     medianLong = grocery['longitude'].median()
     medianLat = grocery['latitude'].median()
+    st.write(grocery.dtypes)
 
     beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
     roadLabel = pd.read_json("./roadLabel.json")

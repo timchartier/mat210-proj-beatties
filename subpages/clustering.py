@@ -1,5 +1,6 @@
 # Module imports
 # from altair.vegalite.v4.api import value
+from sklearn.utils.validation import column_or_1d
 import streamlit as st
 import plotly.express as px
 # import plotly.figure_factory as ff
@@ -13,6 +14,7 @@ from sklearn.cluster import KMeans
 import pydeck as pdk
 from pydeck.types import String
 import math
+from statistics import median
 
 
 def run():
@@ -243,7 +245,17 @@ def run():
 
         dataForMap['fill_color'] = dataForMap['scaled'].apply(lambda x: [26,136,32,x*200])
         dataForMap['tooltip_text'] = dataForMap[variableToView].apply(lambda x: '{}: {}'.format(variableToView.replace('_',' '),x))
-        # st.write(dataForMap)
+        # dataForMap['label_coordinates'] = dataForMap['coordinates'].apply(lambda x: [sum(y)/len(y) for y in zip(*x[0])])
+        # NPA_Labels = dataForMap.loc[:,['NPA','label_coordinates']]
+        # NPA_Labels.loc[:,'NPA_str'] = NPA_Labels.loc[:,'NPA'].apply(lambda x: str(x))
+        # NPA_Labels[['longitude','latitude']] = pd.DataFrame(NPA_Labels.label_coordinates.to_list(),index=NPA_Labels.index)
+        # NPA_Labels = NPA_Labels.drop(columns=['label_coordinates'])
+        # NPA_Labels.to_csv('./qol-data/NPA_Labels.csv',index=False)
+
+        NPA_Labels = pd.read_csv('./qol-data/NPA_Labels.csv')
+        NPA_Labels['NPA_str'] = NPA_Labels['NPA_str'].astype(str)
+        st.write(NPA_Labels.dtypes)
+
 
         variable_layer = pdk.Layer(
             'PolygonLayer',
@@ -258,13 +270,27 @@ def run():
             auto_highlight=True
         )
 
+        npa_label_layer = pdk.Layer(
+            'TextLayer',
+            data=NPA_Labels,
+            id='label',
+            pickable=False,
+            get_size=16,
+            get_color=[1, 1, 1],
+            get_position=['longitude','latitude'],
+            get_text="NPA_str",
+            get_angle=0,
+            get_text_anchor=String("middle"),
+            get_alignment_baseline=String("center")
+        )
+
         tooltip2 = {
             "html": "<b>NPA: {NPA}</b><br><b>{tooltip_text}"
         }
 
         deck2 = pdk.Deck(
             map_style='mapbox://styles/mapbox/streets-v11',
-            layers=[variable_layer,road_layer],
+            layers=[variable_layer,road_layer,npa_label_layer],
             initial_view_state=view_state,
             tooltip=tooltip2
         )
