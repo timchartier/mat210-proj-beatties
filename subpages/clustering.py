@@ -1,4 +1,5 @@
 # Module imports
+from altair.vegalite.v4.api import value
 import streamlit as st
 import plotly.express as px
 import plotly.figure_factory as ff
@@ -15,8 +16,8 @@ import math
 
 
 def run():
-
-    st.title('Clustering neighborhoods along Beatties Ford Road')
+    with st.beta_container():
+        st.title('Clustering neighborhoods along Beatties Ford Road')
     st.markdown("""
     Here, we cluster Neighborhood Profile Areas (NPAs) according to characteristics of your choosing.
 
@@ -197,7 +198,8 @@ def run():
             data=beattiesGeoJson,
             filled=True,
             pickable=False,
-            lineWidthMinPixels=2,
+            lineWidthMinPixels=3,
+            get_line_color=[0,0,200],
             opacity=1,
             id='beatties-ford-road',
             use_binary_transport=False,
@@ -214,6 +216,44 @@ def run():
         )
 
         st.pydeck_chart(deck)
+
+        # View variables on NPA map
+        st.markdown('### See specific variables by NPA')
+        variableToView = st.selectbox(label="Variable",options=clusteringFields,key=0,format_func=lambda x: x.replace('_', ' '))
+        from sklearn.preprocessing import minmax_scale
+        dataForMap = master[['NPA',variableToView]]
+        dataForMap = pd.merge(dataForMap,df2[['NPA','coordinates']],on="NPA",how="left")
+        dataScaled = minmax_scale(dataForMap[variableToView].to_frame(),axis=0)
+        dataScaled = pd.DataFrame(dataScaled)
+        dataForMap['scaled'] = dataScaled
+
+        dataForMap['fill_color'] = dataForMap['scaled'].apply(lambda x: [26,136,32,x*200])
+        dataForMap['tooltip_text'] = dataForMap[variableToView].apply(lambda x: '{}: {}'.format(variableToView.replace('_',' '),x))
+        # st.write(dataForMap)
+
+        variable_layer = pdk.Layer(
+            'PolygonLayer',
+            data=dataForMap,
+            filled=True,
+            extruded=False,
+            get_fill_color="fill_color",
+            get_polygon="coordinates",
+            get_line_color=[0,0,0],
+            lineWidthMinPixels=1,
+            pickable=True
+        )
+
+        tooltip2 = {
+            "html": "<b>NPA: {NPA}</b><br><b>{tooltip_text}"
+        }
+
+        deck2 = pdk.Deck(
+            map_style='mapbox://styles/mapbox/streets-v11',
+            layers=[variable_layer,road_layer],
+            initial_view_state=view_state,
+            tooltip=tooltip2
+        )
+        st.pydeck_chart(deck2)
 
 
 if __name__ == "__main__":
