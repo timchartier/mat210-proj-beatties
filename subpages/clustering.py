@@ -21,7 +21,7 @@ def run():
     st.markdown("""
     Here, we cluster Neighborhood Profile Areas (NPAs) according to characteristics of your choosing.
 
-    As defined by the Quality of Life Study:
+    As defined by the [Quality of Life Study](https://mcmap.org/qol/#15/):
 
     > *Neighborhood Profile Areas (NPAs) are geographic areas used for the organization and presentation of data in the Quality of Life Study.
     The boundaries were developed with community input and are based on one or more Census block groups.*
@@ -75,25 +75,36 @@ def run():
 
     # Section on clustering
     st.markdown("## Clustering NPAs")
-    fieldList = master.columns
-    fields2017 = list(fieldList[fieldList.to_series().str.endswith(
-        '2017') & ~fieldList.to_series().str.contains('moe')])
     usableData = master.dropna(axis='columns').drop(columns=['NPA', 'order'])
 
     data = master[list(usableData.columns)].dropna(axis='columns')
 
+    variablePresets = {
+        'Demographic': ["White_Population_2017","Black_Population_2017","Asian_Population_2017","Hispanic_Latino_2017","All_Other_Races_2017"],
+        'Education': ['Proficiency_Elementary_School_2017','Proficiency_Middle_School_2017','High_School_Diploma_2017','Bachelors_Degree_2017', 'Early_Care_Proximity_2017'],
+        'Health Resources Proximity': ['Low_Cost_Healthcare_Proximity_2018','Pharmacy_Proximity_2018','Grocery_Proximity_2018'],
+        'Transportation': ['Long_Commute_2018','Bicycle_Friendliness_2018','Street_Connectivity_2018','Sidewalk_Availability_2015','Transit_Proximity_2018'],
+        'Engagement': ['Arts_Participation_2013','311_Requests_2016','Voter_Participation_2018',],
+        'Environment': ['Tree_Canopy_2012','Residential_Tree_Canopy_2012','Impervious_Surface_2018','Natural_Gas_Consumption_2013','Water_Consumption_2018','Commuters_Driving_Alone_2018',],
+        'Housing': ['Housing_Density_2019','Single_Family_Housing_2019','Housing_Size_2019','Housing_Age_2019','Rental_Houses_2018','New_Residential_2018','Residential_Renovation_2018','Home_Sales_Price_2015','Home_Ownership_2018','Residential_Occupancy_2018','Rental_Houses_2017',],
+        'Crime': ['Violent_Crime_Rate_2018','Property_Crime_Rate_2018','Disorder_Call_Rate_2018',]
+    }
+
+    whichPreset = st.selectbox(
+        label="Use preselected sets of variables",
+        options=list(variablePresets.keys()),
+        index=0
+    )
+
     with st.beta_container():
         # Streamlit multiselect to pick fields for clustering; => Default ["White_Population_2020"]
         col1, col2 = st.beta_columns((4, 1))
-        clusteringFields = col1.multiselect(label='Select fields for clustering',
+        clusteringFields = col1.multiselect(label='Or, select specific fields for clustering (or add on to the presets!)',
                                             options=list(usableData.columns),
                                             format_func=lambda x: x.replace(
                                                 '_', ' '),
-                                            default=["White_Population_2017",
-                                                     "Black_Population_2017",
-                                                     "Asian_Population_2017",
-                                                     "Hispanic_Latino_2017",
-                                                     "All_Other_Races_2017"])
+                                            default=variablePresets[whichPreset],
+                                            help="Choose from the dropdown, or type to search.")
         with st.beta_expander("Variable Descriptions"):
             for var in clusteringFields:
                 varCode = variableLookup[variableLookup['name'] == var]['code'].values[0]
@@ -104,7 +115,7 @@ def run():
         st.empty()
 
     numberOfClusters = col2.number_input(
-        label="Number of Clusters", min_value=2, max_value=5, value=2)
+        label="Number of Clusters", min_value=2, max_value=5, value=2,help="Min: 2, Max: 5")
 
     # If no fields selected, give error
     if len(clusteringFields) == 0:
@@ -221,7 +232,7 @@ def run():
         st.pydeck_chart(deck)
 
         # View variables on NPA map
-        st.markdown('### See specific variables by NPA')
+        st.markdown('### See these variables by NPA')
         variableToView = st.selectbox(label="Variable",options=clusteringFields,key=0,format_func=lambda x: x.replace('_', ' '))
         from sklearn.preprocessing import minmax_scale
         dataForMap = master[['NPA',variableToView]]
