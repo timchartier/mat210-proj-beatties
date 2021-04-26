@@ -240,7 +240,8 @@ def run():
             get_polygon="coordinates",
             get_line_color=[0,0,0],
             lineWidthMinPixels=1,
-            pickable=True
+            pickable=True,
+            auto_highlight=True
         )
 
         tooltip2 = {
