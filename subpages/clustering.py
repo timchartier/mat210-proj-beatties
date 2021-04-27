@@ -190,6 +190,7 @@ def run():
         view_state = pdk.ViewState(
             **{"latitude": 35.33, "longitude": -80.89, "zoom": 10.50, "maxZoom": 22, "pitch": 0, "bearing": 0}
         )
+        # st.write(df2)
 
         beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
 

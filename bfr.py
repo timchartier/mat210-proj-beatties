@@ -5,6 +5,7 @@ import subpages.home as home
 import subpages.clustering as clustering
 import subpages.beatties as beatties
 import subpages.raceOverTime as raceOverTime
+import subpages.evictions as evictions
 
 # This is the master file for the Beatties Ford Road dashboard
 st.set_page_config(page_title="Beatties Ford Road", layout="wide")
@@ -15,7 +16,8 @@ PAGES = {
     'Home': home,
     'Clustering': clustering,
     'Beatties': beatties,
-    'Demographics over Time': raceOverTime
+    'Demographics over Time': raceOverTime,
+    'Evictions': evictions
 }
 st.sidebar.markdown('## Page Navigation')
 selectedPage = st.sidebar.radio(
