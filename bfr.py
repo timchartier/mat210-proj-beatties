@@ -4,6 +4,7 @@ import streamlit as st
 import subpages.home as home
 import subpages.clustering as clustering
 import subpages.beatties as beatties
+import subpages.raceOverTime as raceOverTime
 
 # This is the master file for the Beatties Ford Road dashboard
 st.set_page_config(page_title="Beatties Ford Road", layout="wide")
@@ -13,7 +14,8 @@ PAGES = {
     # dict of pages here
     'Home': home,
     'Clustering': clustering,
-    'Beatties': beatties
+    'Beatties': beatties,
+    'Demographics over Time': raceOverTime
 }
 st.sidebar.markdown('## Page Navigation')
 selectedPage = st.sidebar.radio(
