@@ -64,14 +64,13 @@ def run():
         "html": "<b>GEOID: {GEOID}</b>"
     }
 
+    view_state = pdk.ViewState(
+        **{"latitude": 35.33, "longitude": -80.89, "zoom": 10.50, "maxZoom": 22, "pitch": 0, "bearing": 0}
+    )
+
     deck = pdk.Deck(
         map_style="mapbox://styles/mapbox/streets-v11",
-        initial_view_state=pdk.ViewState(
-            latitude=35.285122,
-            longitude=-80.846734,
-            zoom=9.5,
-            pitch=0,
-        ),
+        initial_view_state=view_state,
         layers=[block_group_layer,road_layer],
         tooltip=tooltip
     )
