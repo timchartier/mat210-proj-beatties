@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import os
 
 
@@ -33,12 +35,20 @@ def run():
                     orientation="h", labels=dict(order="NPA", population="Population"), title="Population by Race ({})".format(year))
         fig.update_yaxes(autorange="reversed",
                         ticktext=data.NPA.tolist(), tickvals=data.order.to_list())
+        fig.update_layout(legend=dict(
+            yanchor="top",
+            y=-.2,
+            xanchor="left",
+            x=0.01,
+            orientation='h'
+        ))
 
         graphs[year] = fig
-    
+
     col1.plotly_chart(graphs['2000'],use_container_width=True)
     col2.plotly_chart(graphs['2010'],use_container_width=True)
     col3.plotly_chart(graphs['2018'],use_container_width=True)
+
 
 if __name__ == "__main__":
     run()
