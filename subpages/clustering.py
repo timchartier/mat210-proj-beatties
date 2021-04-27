@@ -1,5 +1,6 @@
 # Module imports
 # from altair.vegalite.v4.api import value
+from sklearn import cluster
 from sklearn.utils.validation import column_or_1d
 import streamlit as st
 import plotly.express as px
@@ -192,8 +193,10 @@ def run():
         )
         # st.write(df2)
 
+        # URL for Beatties Ford Road shape
         beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
 
+        # Create pydeck layer for NPAs filled according to their clusters
         polygon_layer = pdk.Layer(
             "PolygonLayer",
             df2,
@@ -210,6 +213,7 @@ def run():
             pickable=True,
         )
 
+        # Create layer to show the Beatties Ford Road shape
         road_layer = pdk.Layer(
             'GeoJsonLayer',
             data=beattiesGeoJson,
@@ -233,6 +237,10 @@ def run():
         )
 
         st.pydeck_chart(deck)
+
+        # If selected fields are same as one of the presets, show our explanatory text.
+        if clusteringFields.sort() == variablePresets[whichPreset].sort() and len(clusteringFields) == len(variablePresets[whichPreset]):
+            st.write('Hello, this is working.')
 
         # View variables on NPA map
         st.markdown('### See these variables by NPA')

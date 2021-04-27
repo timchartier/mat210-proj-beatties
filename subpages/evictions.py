@@ -9,7 +9,8 @@ def run():
 
     df = pd.read_csv('./eviction-lab-data/block-groups.csv')
     df = df[df['parent-location'] == "Mecklenburg County, North Carolina"]
-    st.write(df.dtypes)
+    # st.write(df.dtypes)
+    st.write(df)
 
     # geojson = json.load(open('./eviction-lab-data/block-groups.geojson'))
     # geojson['features'] = [bg for bg in geojson['features'] if "Mecklenburg" in bg['properties']['pl']]
@@ -24,14 +25,12 @@ def run():
     # geo['GEOID'] = [feature['properties']['GEOID'] for feature in geojson['features']]
     # geo['coordinates'] = [feature['geometry']['coordinates'][0] for feature in geojson['features']]
 
-    beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
-    # geo = pd.read_csv('./eviction-lab-data/meckBlockGroups.csv')
-    # geo['GEOID'] = geo['GEOID'].astype(str)
-    # combined = pd.merge(df,geo,on="GEOID",how="left")
-    # geo.to_csv('./eviction-lab-data/meckBlockGroups.csv',index=False)
+    # # geo = pd.read_csv('./eviction-lab-data/meckBlockGroups.csv')
+    # # geo['GEOID'] = geo['GEOID'].astype(str)
+    # # combined = pd.merge(df,geo,on="GEOID",how="left")
+    # geo.to_pickle('./eviction-lab-data/meckBlockGroups.pkl')
 
-    geo = pd.read_csv('./eviction-lab-data/meckBlockGroups.csv')
-    geo['coordinates'] = geo['coordinates'].apply(lambda x: eval(x))
+    geo = pd.read_pickle('./eviction-lab-data/meckBlockGroups.pkl')
 
     block_group_layer = pdk.Layer(
         'PolygonLayer',
@@ -46,6 +45,8 @@ def run():
         extruded=False,
         auto_highlight=True
     )
+
+    beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
 
     road_layer = pdk.Layer(
         'GeoJsonLayer',
@@ -74,4 +75,5 @@ def run():
         layers=[block_group_layer,road_layer],
         tooltip=tooltip
     )
+    st.markdown('## Block group map')
     st.pydeck_chart(deck)
