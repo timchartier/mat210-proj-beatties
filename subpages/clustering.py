@@ -254,7 +254,7 @@ def run():
 
         NPA_Labels = pd.read_csv('./qol-data/NPA_Labels.csv')
         NPA_Labels['NPA_str'] = NPA_Labels['NPA_str'].astype(str)
-        st.write(NPA_Labels.dtypes)
+#         st.write(NPA_Labels.dtypes)
 
 
         variable_layer = pdk.Layer(
