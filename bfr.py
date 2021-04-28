@@ -6,7 +6,7 @@ import subpages.clustering as clustering
 import subpages.beatties as beatties
 import subpages.raceOverTime as raceOverTime
 import subpages.evictions as evictions
-
+import subpages.testing as journey
 # This is the master file for the Beatties Ford Road dashboard
 st.set_page_config(page_title="Beatties Ford Road", layout="wide")
 
@@ -14,6 +14,7 @@ st.set_page_config(page_title="Beatties Ford Road", layout="wide")
 PAGES = {
     # dict of pages here
     'Home': home,
+    'Journey Down Beatties Ford Road': journey,
     'Clustering': clustering,
     'Beatties': beatties,
     'Demographics over Time': raceOverTime,
