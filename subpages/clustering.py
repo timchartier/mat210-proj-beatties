@@ -63,42 +63,15 @@ def run():
     data = master[list(usableData.columns)].dropna(axis='columns')
 
     variablePresets = {
-        'None': {
-            'variables':['Population_Density_2018'],
-            'description': 'Description for no preset selected'
-        },
-        'Racial Composition': {
-            'variables': ["White_Population_2017","Black_Population_2017","Asian_Population_2017","Hispanic_Latino_2017","All_Other_Races_2017"],
-            'description': """"""
-        },
-        'Education': {
-            'variables':['Proficiency_Elementary_School_2017','Proficiency_Middle_School_2017','High_School_Diploma_2017','Bachelors_Degree_2017', 'Early_Care_Proximity_2017'],
-            'description': ''
-        },
-        'Health Resources Proximity': {
-            'variables':['Low_Cost_Healthcare_Proximity_2018','Pharmacy_Proximity_2018','Grocery_Proximity_2018'],
-            'description':''
-        },
-        'Transportation': {
-            'variables':['Long_Commute_2018','Bicycle_Friendliness_2018','Street_Connectivity_2018','Sidewalk_Availability_2015','Transit_Proximity_2018'],
-            'description': ''
-        },
-        'Engagement': {
-            'variables':['Arts_Participation_2013','311_Requests_2016','Voter_Participation_2018',],
-            'description': ''
-        },
-        'Environment': {
-            'variables':['Tree_Canopy_2012','Residential_Tree_Canopy_2012','Impervious_Surface_2018','Natural_Gas_Consumption_2013','Water_Consumption_2018','Commuters_Driving_Alone_2018',],
-            'description': ''
-        },
-        'Housing': {
-            'variables':['Housing_Density_2019','Single_Family_Housing_2019','Housing_Size_2019','Housing_Age_2019','Rental_Houses_2018','New_Residential_2018','Residential_Renovation_2018','Home_Sales_Price_2015','Home_Ownership_2018','Residential_Occupancy_2018','Rental_Houses_2017',],
-            'description': ''
-        },
-        'Crime': {
-            'variables':['Violent_Crime_Rate_2018','Property_Crime_Rate_2018','Disorder_Call_Rate_2018',],
-            'description': ''
-        }
+        'None': ['Population_Density_2018'],
+        'Racial Composition': ["White_Population_2017","Black_Population_2017","Asian_Population_2017","Hispanic_Latino_2017","All_Other_Races_2017"],
+        'Education': ['Proficiency_Elementary_School_2017','Proficiency_Middle_School_2017','High_School_Diploma_2017','Bachelors_Degree_2017', 'Early_Care_Proximity_2017'],
+        'Health Resources Proximity':['Low_Cost_Healthcare_Proximity_2018','Pharmacy_Proximity_2018','Grocery_Proximity_2018'],
+        'Transportation': ['Long_Commute_2018','Bicycle_Friendliness_2018','Street_Connectivity_2018','Sidewalk_Availability_2015','Transit_Proximity_2018'],
+        'Engagement':['Arts_Participation_2013','311_Requests_2016','Voter_Participation_2018',],
+        'Environment':['Tree_Canopy_2012','Residential_Tree_Canopy_2012','Impervious_Surface_2018','Natural_Gas_Consumption_2013','Water_Consumption_2018','Commuters_Driving_Alone_2018',],
+        'Housing':['Housing_Density_2019','Single_Family_Housing_2019','Housing_Size_2019','Housing_Age_2019','Rental_Houses_2018','New_Residential_2018','Residential_Renovation_2018','Home_Sales_Price_2015','Home_Ownership_2018','Residential_Occupancy_2018','Rental_Houses_2017',],
+        'Crime':['Violent_Crime_Rate_2018','Property_Crime_Rate_2018','Disorder_Call_Rate_2018',]
     }
 
     with st.beta_container():
@@ -115,7 +88,7 @@ def run():
                                             options=list(usableData.columns),
                                             format_func=lambda x: x.replace(
                                                 '_', ' '),
-                                            default=variablePresets[whichPreset]['variables'],
+                                            default=variablePresets[whichPreset],
                                             help="Choose from the dropdown, or type to search.")
         with st.beta_expander("Variable Descriptions",expanded=len(clusteringFields) > 0):
             for var in clusteringFields:
@@ -289,7 +262,12 @@ def run():
 
         # If selected fields are same as one of the presets, show our explanatory text with the map.
         st.write('### Cluster Map')
-        if clusteringFields.sort() == variablePresets[whichPreset]['variables'].sort() and len(clusteringFields) == len(variablePresets[whichPreset]['variables']) and not whichPreset == 'None':
+        # sortedClusteringFields = clusteringFields.sort()
+        if clusteringFields.copy().sort() == variablePresets[whichPreset].copy().sort()\
+            and len(clusteringFields) == len(variablePresets[whichPreset])\
+            and not whichPreset == 'None'\
+            and not descriptions[whichPreset]['description'] == '': # don't leave space for missing descriptions
+
             colA,colB,colC = st.beta_columns([10,1,9])
             with colA:
                 st.pydeck_chart(deck)

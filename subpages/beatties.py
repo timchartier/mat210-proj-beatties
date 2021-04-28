@@ -13,7 +13,7 @@ def run():
     st.title('Beatties Ford Road Project')
 
 
-    st.video('https://www.youtube.com/watch?v=sK-MlWm7Iuc')
+    st.video('https://youtu.be/-4C9mGXIc7s')
 
 
     grocery = pd.read_csv('./grocery-data/Grocery_Stores.csv')
@@ -30,16 +30,13 @@ def run():
     roadLabel = pd.read_json("./roadLabel.json")
 
     tooltip = {"html": "<b>Store:</b> {Name}"}
-
+    view_state = pdk.ViewState(
+            **{"latitude": 35.33, "longitude": -80.89, "zoom": 10.50, "maxZoom": 22, "pitch": 0, "bearing": 0}
+        )
     st.write("""## Grocery stores in Mecklenburg County""")
     st.pydeck_chart(pdk.Deck(
         map_style='mapbox://styles/mapbox/streets-v11',
-        initial_view_state=pdk.ViewState(
-            latitude=35.285122,
-            longitude=-80.846734,
-            zoom=9.5,
-            pitch=0,
-        ),
+        initial_view_state=view_state,
         layers=[
             pdk.Layer(
                 'ScatterplotLayer',
@@ -57,7 +54,8 @@ def run():
                 data=beattiesGeoJson,
                 filled=True,
                 pickable=False,
-                lineWidthMinPixels=2,
+                lineWidthMinPixels=3,
+                get_line_color=[0,0,200],
                 opacity=1,
                 id='beatties-ford-road',
                 use_binary_transport=False,
