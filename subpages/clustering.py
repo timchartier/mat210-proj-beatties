@@ -15,7 +15,6 @@ from sklearn.cluster import KMeans
 import pydeck as pdk
 from pydeck.types import String
 import math
-from statistics import median
 
 
 def run():
@@ -41,40 +40,21 @@ def run():
 
     def formatChoice(x): return x.replace('_', ' ')
 
-    st.markdown('## Dynamic Chart')
-    variable = st.selectbox(label="Pick a variable", options=list(
-        master.columns), format_func=lambda x: x.replace('_', ' '), index=5)
-    varCode = variableLookup[variableLookup['name'] == variable]['code'].values[0]
-    description = metadata[metadata['Short _Name'] == varCode]['Long_Description'].values[0]
-    st.write(description)
+    # st.markdown('## Dynamic Chart')
+    # variable = st.selectbox(label="Pick a variable", options=list(
+    #     master.columns), format_func=lambda x: x.replace('_', ' '), index=5)
+    # varCode = variableLookup[variableLookup['name'] == variable]['code'].values[0]
+    # description = metadata[metadata['Short _Name'] == varCode]['Long_Description'].values[0]
+    # st.write(description)
 
-    # st.write(master[variable])
+    # # st.write(master[variable])
 
-    fig2 = px.bar(master, x=variable, y="order", orientation="h",
-                  labels=dict(variable=formatChoice(variable), order="NPA"))
-    fig2.update_yaxes(autorange="reversed",
-                      ticktext=master.NPA.tolist(), tickvals=master.order.to_list())
-    st.plotly_chart(fig2)
+    # fig2 = px.bar(master, x=variable, y="order", orientation="h",
+    #               labels=dict(variable=formatChoice(variable), order="NPA"))
+    # fig2.update_yaxes(autorange="reversed",
+    #                   ticktext=master.NPA.tolist(), tickvals=master.order.to_list())
+    # st.plotly_chart(fig2)
 
-    # # Construct dataframe for population by race
-    # data = master[['NPA', 'order', 'Population _2018', 'White_Population_2018',
-    #                'Black_Population_2018', 'Asian_Population_2018', 'Hispanic_Latino_2018', 'All_Other_Races_2018']]
-    # data.columns = ['NPA', 'order', 'Total Population',
-    #                 'White', 'Black', 'Asian', 'Hispanic/Latino', 'Other']
-    # data[['White', 'Black', 'Asian', 'Hispanic/Latino', 'Other']
-    #      ] = data[['White', 'Black', 'Asian', 'Hispanic/Latino', 'Other']].astype(float)
-    # data[['White', 'Black', 'Asian', 'Hispanic/Latino', 'Other']] = data[['White', 'Black',
-    #                                                                       'Asian', 'Hispanic/Latino', 'Other']].multiply(data['Total Population'], axis="index")/100
-
-    # melted = pd.melt(data, id_vars=['NPA', 'order'], value_vars=[
-    #     'White', 'Black', 'Asian', 'Hispanic/Latino', 'Other'], var_name="Race", value_name="population")
-
-    # fig3 = px.bar(melted, y="order", x="population", color="Race",
-    #               orientation="h", labels=dict(order="NPA", population="Population"), title="Population by Race")
-    # fig3.update_yaxes(autorange="reversed",
-    #                   ticktext=data.NPA.tolist(), tickvals=data.order.to_list())
-
-    # st.plotly_chart(fig3)
 
     # Section on clustering
     st.markdown("## Clustering NPAs")
@@ -83,32 +63,61 @@ def run():
     data = master[list(usableData.columns)].dropna(axis='columns')
 
     variablePresets = {
-        'Demographic': ["White_Population_2017","Black_Population_2017","Asian_Population_2017","Hispanic_Latino_2017","All_Other_Races_2017"],
-        'Education': ['Proficiency_Elementary_School_2017','Proficiency_Middle_School_2017','High_School_Diploma_2017','Bachelors_Degree_2017', 'Early_Care_Proximity_2017'],
-        'Health Resources Proximity': ['Low_Cost_Healthcare_Proximity_2018','Pharmacy_Proximity_2018','Grocery_Proximity_2018'],
-        'Transportation': ['Long_Commute_2018','Bicycle_Friendliness_2018','Street_Connectivity_2018','Sidewalk_Availability_2015','Transit_Proximity_2018'],
-        'Engagement': ['Arts_Participation_2013','311_Requests_2016','Voter_Participation_2018',],
-        'Environment': ['Tree_Canopy_2012','Residential_Tree_Canopy_2012','Impervious_Surface_2018','Natural_Gas_Consumption_2013','Water_Consumption_2018','Commuters_Driving_Alone_2018',],
-        'Housing': ['Housing_Density_2019','Single_Family_Housing_2019','Housing_Size_2019','Housing_Age_2019','Rental_Houses_2018','New_Residential_2018','Residential_Renovation_2018','Home_Sales_Price_2015','Home_Ownership_2018','Residential_Occupancy_2018','Rental_Houses_2017',],
-        'Crime': ['Violent_Crime_Rate_2018','Property_Crime_Rate_2018','Disorder_Call_Rate_2018',]
+        'None': {
+            'variables':['Population_Density_2018'],
+            'description': 'Description for no preset selected'
+        },
+        'Demographic': {
+            'variables': ["White_Population_2017","Black_Population_2017","Asian_Population_2017","Hispanic_Latino_2017","All_Other_Races_2017"],
+            'description': ''
+        },
+        'Education': {
+            'variables':['Proficiency_Elementary_School_2017','Proficiency_Middle_School_2017','High_School_Diploma_2017','Bachelors_Degree_2017', 'Early_Care_Proximity_2017'],
+            'description': ''
+        },
+        'Health Resources Proximity': {
+            'variables':['Low_Cost_Healthcare_Proximity_2018','Pharmacy_Proximity_2018','Grocery_Proximity_2018'],
+            'description':''
+        },
+        'Transportation': {
+            'variables':['Long_Commute_2018','Bicycle_Friendliness_2018','Street_Connectivity_2018','Sidewalk_Availability_2015','Transit_Proximity_2018'],
+            'description': ''
+        },
+        'Engagement': {
+            'variables':['Arts_Participation_2013','311_Requests_2016','Voter_Participation_2018',],
+            'description': ''
+        },
+        'Environment': {
+            'variables':['Tree_Canopy_2012','Residential_Tree_Canopy_2012','Impervious_Surface_2018','Natural_Gas_Consumption_2013','Water_Consumption_2018','Commuters_Driving_Alone_2018',],
+            'description': ''
+        },
+        'Housing': {
+            'variables':['Housing_Density_2019','Single_Family_Housing_2019','Housing_Size_2019','Housing_Age_2019','Rental_Houses_2018','New_Residential_2018','Residential_Renovation_2018','Home_Sales_Price_2015','Home_Ownership_2018','Residential_Occupancy_2018','Rental_Houses_2017',],
+            'description': ''
+        },
+        'Crime': {
+            'variables':['Violent_Crime_Rate_2018','Property_Crime_Rate_2018','Disorder_Call_Rate_2018',],
+            'description': ''
+        }
     }
-
-    whichPreset = st.selectbox(
-        label="Use preselected sets of variables",
-        options=list(variablePresets.keys()),
-        index=0
-    )
 
     with st.beta_container():
         # Streamlit multiselect to pick fields for clustering; => Default ["White_Population_2020"]
         col1, col2 = st.beta_columns((4, 1))
-        clusteringFields = col1.multiselect(label='Or, select specific fields for clustering (or add on to the presets!)',
+
+        with col1:
+            whichPreset = st.selectbox(
+                label="Use curated presets of variables",
+                options=list(variablePresets.keys()),
+                index=1
+            )
+        clusteringFields = st.multiselect(label='Or, select specific fields for clustering (or modify the presets!)',
                                             options=list(usableData.columns),
                                             format_func=lambda x: x.replace(
                                                 '_', ' '),
-                                            default=variablePresets[whichPreset],
+                                            default=variablePresets[whichPreset]['variables'],
                                             help="Choose from the dropdown, or type to search.")
-        with st.beta_expander("Variable Descriptions"):
+        with st.beta_expander("Variable Descriptions",expanded=len(clusteringFields) > 0):
             for var in clusteringFields:
                 varCode = variableLookup[variableLookup['name'] == var]['code'].values[0]
                 description = metadata[metadata['Short _Name'] == varCode]['Long_Description'].values[0]
@@ -122,6 +131,7 @@ def run():
 
     # If no fields selected, give error
     if len(clusteringFields) == 0:
+        st.text("")
         st.error("Please select one or more fields for clustering NPAs.")
     # Else display the clusters and map
     else:
@@ -236,74 +246,85 @@ def run():
             tooltip=tooltip
         )
 
-        st.pydeck_chart(deck)
+        
 
-        # If selected fields are same as one of the presets, show our explanatory text.
-        if clusteringFields.sort() == variablePresets[whichPreset].sort() and len(clusteringFields) == len(variablePresets[whichPreset]):
-            st.write('Hello, this is working.')
+        # If selected fields are same as one of the presets, show our explanatory text with the map.
+        if clusteringFields.sort() == variablePresets[whichPreset]['variables'].sort() and len(clusteringFields) == len(variablePresets[whichPreset]['variables']) and not whichPreset == 'None':
+            colA,colB,colC = st.beta_columns([4,1,3])
+            with colA:
+                st.pydeck_chart(deck)
+            with colC:
+                st.write(variablePresets[whichPreset]['description'])
+        # Otherwise, just show the map
+        else:
+            colA,colB,colC = st.beta_columns([2,4,2])
+            with colB:
+                st.pydeck_chart(deck)
 
-        # View variables on NPA map
-        st.markdown('### See these variables by NPA')
-        variableToView = st.selectbox(label="Variable",options=clusteringFields,key=0,format_func=lambda x: x.replace('_', ' '))
-        from sklearn.preprocessing import minmax_scale
-        dataForMap = master[['NPA',variableToView]]
-        dataForMap = pd.merge(dataForMap,df2[['NPA','coordinates']],on="NPA",how="left")
-        dataScaled = minmax_scale(dataForMap[variableToView].to_frame(),axis=0)
-        dataScaled = pd.DataFrame(dataScaled)
-        dataForMap['scaled'] = dataScaled
+        # View single variable on NPA map
+        colX,colY,colZ = st.beta_columns([2,4,2])
+        with colY:
+            st.markdown('### Visualize individual variables by NPA')
+            variableToView = st.selectbox(label="Variable",options=clusteringFields,key=0,format_func=lambda x: x.replace('_', ' '))
+            from sklearn.preprocessing import minmax_scale
+            dataForMap = master[['NPA',variableToView]]
+            dataForMap = pd.merge(dataForMap,df2[['NPA','coordinates']],on="NPA",how="left")
+            dataScaled = minmax_scale(dataForMap[variableToView].to_frame(),axis=0)
+            dataScaled = pd.DataFrame(dataScaled)
+            dataForMap['scaled'] = dataScaled
 
-        dataForMap['fill_color'] = dataForMap['scaled'].apply(lambda x: [26,136,32,x*200])
-        dataForMap['tooltip_text'] = dataForMap[variableToView].apply(lambda x: '{}: {}'.format(variableToView.replace('_',' '),x))
-        # dataForMap['label_coordinates'] = dataForMap['coordinates'].apply(lambda x: [sum(y)/len(y) for y in zip(*x[0])])
-        # NPA_Labels = dataForMap.loc[:,['NPA','label_coordinates']]
-        # NPA_Labels.loc[:,'NPA_str'] = NPA_Labels.loc[:,'NPA'].apply(lambda x: str(x))
-        # NPA_Labels[['longitude','latitude']] = pd.DataFrame(NPA_Labels.label_coordinates.to_list(),index=NPA_Labels.index)
-        # NPA_Labels = NPA_Labels.drop(columns=['label_coordinates'])
-        # NPA_Labels.to_csv('./qol-data/NPA_Labels.csv',index=False)
+            dataForMap['fill_color'] = dataForMap['scaled'].apply(lambda x: [26,136,32,x*200])
+            dataForMap['tooltip_text'] = dataForMap[variableToView].apply(lambda x: '{}: {}'.format(variableToView.replace('_',' '),x))
+            # dataForMap['label_coordinates'] = dataForMap['coordinates'].apply(lambda x: [sum(y)/len(y) for y in zip(*x[0])])
+            # NPA_Labels = dataForMap.loc[:,['NPA','label_coordinates']]
+            # NPA_Labels.loc[:,'NPA_str'] = NPA_Labels.loc[:,'NPA'].apply(lambda x: str(x))
+            # NPA_Labels[['longitude','latitude']] = pd.DataFrame(NPA_Labels.label_coordinates.to_list(),index=NPA_Labels.index)
+            # NPA_Labels = NPA_Labels.drop(columns=['label_coordinates'])
+            # NPA_Labels.to_csv('./qol-data/NPA_Labels.csv',index=False)
 
-        NPA_Labels = pd.read_csv('./qol-data/NPA_Labels.csv')
-        NPA_Labels['NPA_str'] = NPA_Labels['NPA_str'].astype(str)
-#         st.write(NPA_Labels.dtypes)
+            NPA_Labels = pd.read_csv('./qol-data/NPA_Labels.csv')
+            NPA_Labels['NPA_str'] = NPA_Labels['NPA_str'].astype(str)
+    #         st.write(NPA_Labels.dtypes)
 
 
-        variable_layer = pdk.Layer(
-            'PolygonLayer',
-            data=dataForMap,
-            filled=True,
-            extruded=False,
-            get_fill_color="fill_color",
-            get_polygon="coordinates",
-            get_line_color=[0,0,0],
-            lineWidthMinPixels=1,
-            pickable=True,
-            auto_highlight=True
-        )
+            variable_layer = pdk.Layer(
+                'PolygonLayer',
+                data=dataForMap,
+                filled=True,
+                extruded=False,
+                get_fill_color="fill_color",
+                get_polygon="coordinates",
+                get_line_color=[0,0,0],
+                lineWidthMinPixels=1,
+                pickable=True,
+                auto_highlight=True
+            )
 
-        npa_label_layer = pdk.Layer(
-            'TextLayer',
-            data=NPA_Labels,
-            id='label',
-            pickable=False,
-            get_size=16,
-            get_color=[1, 1, 1],
-            get_position=['longitude','latitude'],
-            get_text="NPA_str",
-            get_angle=0,
-            get_text_anchor=String("middle"),
-            get_alignment_baseline=String("center")
-        )
+            npa_label_layer = pdk.Layer(
+                'TextLayer',
+                data=NPA_Labels,
+                id='label',
+                pickable=False,
+                get_size=16,
+                get_color=[1, 1, 1],
+                get_position=['longitude','latitude'],
+                get_text="NPA_str",
+                get_angle=0,
+                get_text_anchor=String("middle"),
+                get_alignment_baseline=String("center")
+            )
 
-        tooltip2 = {
-            "html": "<b>NPA: {NPA}</b><br><b>{tooltip_text}"
-        }
+            tooltip2 = {
+                "html": "<b>NPA: {NPA}</b><br><b>{tooltip_text}"
+            }
 
-        deck2 = pdk.Deck(
-            map_style='mapbox://styles/mapbox/streets-v11',
-            layers=[variable_layer,road_layer,npa_label_layer],
-            initial_view_state=view_state,
-            tooltip=tooltip2
-        )
-        st.pydeck_chart(deck2)
+            deck2 = pdk.Deck(
+                map_style='mapbox://styles/mapbox/streets-v11',
+                layers=[variable_layer,road_layer,npa_label_layer],
+                initial_view_state=view_state,
+                tooltip=tooltip2
+            )
+            st.pydeck_chart(deck2)
 
 
 if __name__ == "__main__":

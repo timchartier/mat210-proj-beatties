@@ -1,18 +1,15 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import os
 
 
 def run():
 
-    DATA_FILE = os.path.join(os.path.dirname(__file__),'master.pkl')
+    DATA_FILE = os.path.join(os.path.dirname(__file__),'../qol-data/master.pkl')
 
-    col1,col2,col3 = st.beta_columns([1,1,1])
-
-    master = pd.read_pickle('./qol-data/master.pkl')
+    # master = pd.read_pickle('./qol-data/master.pkl')
+    master = pd.read_pickle(DATA_FILE)
     master.columns = master.columns.str.replace(' ','')
     # Construct dataframe for population by race
 
@@ -45,6 +42,10 @@ def run():
 
         graphs[year] = fig
 
+    st.markdown('## Racial Breakdowns by NPA over time')
+    st.markdown("In these charts below, note that the NPAs are ordered to roughly mirror their geographical positions from north to south along Beatties Ford Road.")
+    
+    col1,col2,col3 = st.beta_columns([1,1,1])
     col1.plotly_chart(graphs['2000'],use_container_width=True)
     col2.plotly_chart(graphs['2010'],use_container_width=True)
     col3.plotly_chart(graphs['2018'],use_container_width=True)
