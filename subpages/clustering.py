@@ -67,9 +67,9 @@ def run():
             'variables':['Population_Density_2018'],
             'description': 'Description for no preset selected'
         },
-        'Demographic': {
+        'Racial Composition': {
             'variables': ["White_Population_2017","Black_Population_2017","Asian_Population_2017","Hispanic_Latino_2017","All_Other_Races_2017"],
-            'description': ''
+            'description': """"""
         },
         'Education': {
             'variables':['Proficiency_Elementary_School_2017','Proficiency_Middle_School_2017','High_School_Diploma_2017','Bachelors_Degree_2017', 'Early_Care_Proximity_2017'],
@@ -103,7 +103,7 @@ def run():
 
     with st.beta_container():
         # Streamlit multiselect to pick fields for clustering; => Default ["White_Population_2020"]
-        col1, col2 = st.beta_columns((4, 1))
+        col1, col2 = st.beta_columns((4, 2))
 
         with col1:
             whichPreset = st.selectbox(
@@ -180,7 +180,7 @@ def run():
         df2 = df2.drop(columns=['cluster'])
 
         # Summary of data by cluster
-        st.markdown('### Averages by Cluster')
+        st.markdown('### Variable averages by cluster')
         summary = master.groupby('cluster').mean()[clusteringFields]
         summary['Cluster'] = summary.index.map(
             lambda x: 'Cluster {}'.format(x))
@@ -246,15 +246,55 @@ def run():
             tooltip=tooltip
         )
 
-        
+        descriptions = {
+            'None': {
+                'description': """Description for no preset selected"""
+            },
+            'Racial Composition': {
+                'description': """
+                    Considering this map, notice especially the great degree of polarity between the `White_Population_2017` and `Black_Population_2017` averages for the displayed clusters (these are percents of the total population). 
+                    
+                    When we construct 2 clusters of these NPAs, we observe quite a clean geographic break between a northern section and a southern section of the area along Beatties Ford Road, with large differences between these clusters' average racial composition. As we change this number to 3, 4, or 5 clusters, we identify smaller, more specific areas with even greater racial uniformity.
+                """
+            },
+            'Education': {
+                'description': """
+                    The clustering of the NPAs along the road based on these education variables turns out remarkably similar to that produced in the clustering for racial composition. For example, notice that the construction of two clusters based on educational variables appears nearly the same as the two clusters based on racial composition, where the cluster with averages indicating lower academic proficiency or success correlates with the cluster with a higher average percentage of black residents.
+
+                    Interestingly, increasing the number of clusters here (try 4 or 5) reveals that a hypothetical "academic index" based on the cluster averages for these variables would clearly decrease from north to south along the road.
+
+                    We should note that the Early Care Proximity variable in this set shows the highest values in the cluster(s) closer to downtown Charlotte. This likely is due to the proximity to an urban area in addition to other demographic factors.
+                """
+            },
+            'Health Resources Proximity': {
+                'description':''
+            },
+            'Transportation': {
+                'description': ''
+            },
+            'Engagement': {
+                'description': ''
+            },
+            'Environment': {
+                'description': ''
+            },
+            'Housing': {
+                'description': ''
+            },
+            'Crime': {
+                'description': ''
+            }
+        }
+
 
         # If selected fields are same as one of the presets, show our explanatory text with the map.
+        st.write('### Cluster Map')
         if clusteringFields.sort() == variablePresets[whichPreset]['variables'].sort() and len(clusteringFields) == len(variablePresets[whichPreset]['variables']) and not whichPreset == 'None':
-            colA,colB,colC = st.beta_columns([4,1,3])
+            colA,colB,colC = st.beta_columns([10,1,9])
             with colA:
                 st.pydeck_chart(deck)
             with colC:
-                st.write(variablePresets[whichPreset]['description'])
+                st.write(descriptions[whichPreset]['description'])
         # Otherwise, just show the map
         else:
             colA,colB,colC = st.beta_columns([2,4,2])
