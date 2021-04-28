@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run bfr.py
+web: sh setup.sh && streamlit run --server.enableCORS false bfr.py
