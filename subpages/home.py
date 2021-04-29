@@ -2,7 +2,7 @@ import streamlit as st
 
 
 def run():
-    st.title("Inequality and Gentrification along Beatties Ford Road")
+    st.title("Disparities and Gentrification along Beatties Ford Road")
     st.write("""
     Final project by Manny Abiad, Liam Carriker, and Will Smith
 
