@@ -16,7 +16,7 @@ PAGES = {
     # dict of pages here
     'Home': home,
     'Journey Down Beatties Ford Road': journey,
-    'Clustering': clustering,
+    'Clusters of Neighborhoods': clustering,
     # 'Beatties': beatties,
     'Data Over Time' : history,
     # 'Demographics over Time': raceOverTime,

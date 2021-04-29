@@ -61,6 +61,7 @@ def run():
     variablePresets = {
         'None': ['Population_Density_2018'],
         'Racial Composition': ["White_Population_2017","Black_Population_2017","Asian_Population_2017","Hispanic_Latino_2017","All_Other_Races_2017"],
+        'Income, Economic': ['Household_Income_2018', 'Public_Nutrition_Assistance_2018','Employment_Rate_2017'],
         'Education': ['Proficiency_Elementary_School_2017','Proficiency_Middle_School_2017','High_School_Diploma_2017','Bachelors_Degree_2017', 'Early_Care_Proximity_2017'],
         'Health Resources Proximity':['Low_Cost_Healthcare_Proximity_2018','Pharmacy_Proximity_2018','Grocery_Proximity_2018'],
         'Transportation': ['Long_Commute_2018','Bicycle_Friendliness_2018','Street_Connectivity_2018','Sidewalk_Availability_2015','Transit_Proximity_2018'],
@@ -184,6 +185,11 @@ def run():
                     When we construct 2 clusters of these NPAs, we observe quite a clean geographic break between a northern section and a southern section of the area along Beatties Ford Road, with large differences between these clusters' average racial composition. As we change this number to 3, 4, or 5 clusters, we identify smaller, more specific areas with even greater racial uniformity.
                 """
             },
+            'Income, Economic': {
+                'description': """
+
+                """
+            },
             'Education': {
                 'description': """
                     The clustering of the NPAs along the road based on these education variables turns out remarkably similar to that produced in the clustering for racial composition. For example, notice that the construction of two clusters based on educational variables appears nearly the same as the two clusters based on racial composition, where the cluster with averages indicating lower academic proficiency or success correlates with the cluster with a higher average percentage of black residents.
@@ -236,7 +242,7 @@ def run():
         # View single variable on NPA map
         colX,colY,colZ = st.beta_columns([2,4,2])
         with colY:
-            st.markdown('### Visualize individual variables by NPA')
+            st.markdown('### Visualize these variables individually by NPA')
             variableToView = st.selectbox(label="Variable",options=clusteringFields,key=0,format_func=lambda x: x.replace('_', ' '))
             from sklearn.preprocessing import minmax_scale
             dataForMap = master[['NPA',variableToView]]
