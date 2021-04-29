@@ -51,7 +51,7 @@ def run():
         ))
 
         hp_graphs[year] = fig
-    st.markdown('## Housing Prices by NPA over time')
+    st.markdown('## Average Housing Prices by NPA over time')
     hp_col1,hp_col2= st.beta_columns([1,1])
     hp_col1.plotly_chart(hp_graphs['2013'],use_container_width=True)
     hp_col2.plotly_chart(hp_graphs['2015'],use_container_width=True)
@@ -85,7 +85,7 @@ def run():
         ))
 
         hi_graphs[year] = fig
-    st.markdown('## Household Income over time')
+    st.markdown('## Average Household Income per NPA over Time')
     hi_col1,hi_col2 = st.beta_columns([1,1])
     hi_col1.plotly_chart(hi_graphs['2017'],use_container_width=True)
     hi_col2.plotly_chart(hi_graphs['2018'],use_container_width=True)
@@ -119,8 +119,7 @@ def run():
         ))
 
         er_graphs[year] = fig
-    st.markdown('## Racial Breakdowns by NPA over time')
-    st.markdown("In these charts below, note that the NPAs are ordered to roughly mirror their geographical positions from north to south along Beatties Ford Road.")
+    st.markdown('## Employment Rates per NPA Region over Time')
     er_col1,er_col2 = st.beta_columns([1,1])
     er_col1.plotly_chart(er_graphs['2017'],use_container_width=True)
     er_col2.plotly_chart(er_graphs['2018'],use_container_width=True)
@@ -160,7 +159,6 @@ def run():
 
         graphs[year] = fig
     st.markdown('## Racial Breakdowns by NPA over time')
-    st.markdown("In these charts below, note that the NPAs are ordered to roughly mirror their geographical positions from north to south along Beatties Ford Road.")
     col1,col2,col3 = st.beta_columns([1,1,1])
     col1.plotly_chart(graphs['2000'],use_container_width=True)
     col2.plotly_chart(graphs['2010'],use_container_width=True)
