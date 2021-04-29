@@ -4,6 +4,7 @@ import streamlit as st
 import pandas as pd
 import pydeck as pdk
 import json
+from . import mapping
 
 def run():
 
@@ -32,48 +33,17 @@ def run():
 
     geo = pd.read_pickle('./eviction-lab-data/meckBlockGroups.pkl')
 
-    block_group_layer = pdk.Layer(
-        'PolygonLayer',
-        data=geo,
-        filled=True,
-        stroked=True,
-        pickable=True,
-        get_polygon="coordinates",
-        lineWidthMinPixels=1,
-        get_line_color=[0,0,0],
-        get_fill_color=[0,0,0,0],
-        extruded=False,
-        auto_highlight=True
-    )
+
+    block_group_layer = mapping.generateNPALayer(geo,variable_fill=False)
 
     beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
 
-    road_layer = pdk.Layer(
-        'GeoJsonLayer',
-        data=beattiesGeoJson,
-        filled=True,
-        pickable=False,
-        lineWidthMinPixels=3,
-        get_line_color=[0,0,200],
-        opacity=1,
-        id='beatties-ford-road',
-        use_binary_transport=False,
-        extruded=True
-    )
+    road_layer = mapping.generateRoadLayer()
 
     tooltip = {
         "html": "<b>GEOID: {GEOID}</b>"
     }
 
-    view_state = pdk.ViewState(
-        **{"latitude": 35.33, "longitude": -80.89, "zoom": 10.50, "maxZoom": 22, "pitch": 0, "bearing": 0}
-    )
-
-    deck = pdk.Deck(
-        map_style="mapbox://styles/mapbox/streets-v11",
-        initial_view_state=view_state,
-        layers=[block_group_layer,road_layer],
-        tooltip=tooltip
-    )
+    deck = mapping.createDeck(layers=[block_group_layer,road_layer],tooltip=tooltip)
     st.markdown('## Block group map')
     st.pydeck_chart(deck)
