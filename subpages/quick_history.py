@@ -31,12 +31,12 @@ def run():
     #housing prices
     hp_graphs = {}
     for year in ['2013','2015']:
-        data = master.loc[:,['NPA', 'order', 'Home_Sale_Price_{}'.format(year)]]
-        data.columns = ['NPA', 'order', 'Home Sale Price']
-        data.loc[:,['Home Sale Price']] = data[['Home Sale Price']].astype(float)
+        data = master.loc[:,['NPA', 'order', 'Home_Sales_Price_{}'.format(year)]]
+        data.columns = ['NPA', 'order', 'Home Sales Price']
+        data.loc[:,['Home Sales Price']] = data[['Home Sales Price']].astype(float)
 
         melted = pd.melt(data, id_vars=['NPA', 'order'], value_vars=[
-            'Home Sale Price'], value_name="price")
+            'Home Sales Price'], value_name="price")
 
         fig = px.bar(melted, y="order", x="price",
                     orientation="h", labels=dict(order="NPA", price="Price"), title="Average Housing Prices by NPA ({})".format(year))
