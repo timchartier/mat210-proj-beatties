@@ -264,7 +264,7 @@ def run():
                 "html": "<b>NPA: {NPA}</b><br><b>{tooltip_text}"
             }
 
-            deck2 = mapping.createDeck(layers=[variable_layer,npa_label_layer],tooltip=tooltip2)
+            deck2 = mapping.createDeck(layers=[variable_layer,npa_label_layer,road_layer],tooltip=tooltip2)
             st.pydeck_chart(deck2)
 
 
