@@ -255,7 +255,6 @@ def run():
             # NPA_Labels.to_csv('./qol-data/NPA_Labels.csv',index=False)
 
             NPA_Labels = pd.read_csv('./qol-data/NPA_Labels.csv')
-            NPA_Labels['NPA_str'] = NPA_Labels['NPA_str'].astype(str)
 
             variable_layer = mapping.generateNPALayer(dataForMap)
 

@@ -32,6 +32,13 @@ def generateNPALayer(data_frame, variable_fill=True,variable_name="fill_color",u
     )
 
 def generateNPALabelsLayer(label_file):
+    """
+        Generates Layer for NPA number labels at the average lng-lat for each NPA.
+
+        label_file: dataframe with columns "NPA_str", "longitude", and "latitude"
+    """
+    label_file["NPA_str"] = label_file["NPA_str"].astype(str)
+
     return pdk.Layer(
         'TextLayer',
         data=label_file,
@@ -46,6 +53,9 @@ def generateNPALabelsLayer(label_file):
     )
 
 def generateRoadLayer():
+    """
+        No arguments here. Just generates layer for Beatties Ford Road highlighted in Blue.
+    """
     beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
     return pdk.Layer(
         'GeoJsonLayer',
@@ -61,6 +71,17 @@ def generateRoadLayer():
 
 defaultTooltip = {"html": "<b>NPA:</b> {NPA}"}
 def createDeck(layers,showTooltip=True,tooltip=defaultTooltip):
+    """
+    Creates the "Deck" object to be passed into st.pydeck_chart()
+
+    Arguments
+    ------------
+    layers: list of layers to include in the deck
+
+    showTooltip: whether to show a tooltip (True/False). This should correspond to some layer that is pickable.
+
+    tooltip: custom tooltip object. E.g. `{"html": "<b>NPA:</b> {NPA}<br><b>YOUR_VARIABLE_NAME:</b> {COLUMN_NAME}"}`
+    """
     view_state = pdk.ViewState(
             **{"latitude": 35.33, "longitude": -80.89, "zoom": 10.50, "maxZoom": 22, "pitch": 0, "bearing": 0}
         )
