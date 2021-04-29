@@ -19,7 +19,7 @@ PAGES = {
     'Clustering': clustering,
     'Beatties': beatties,
     'Data Over Time' : history,
-    'Demographics over Time': raceOverTime,
+    # 'Demographics over Time': raceOverTime,
     'Evictions': evictions
 }
 st.sidebar.markdown('## Page Navigation')
