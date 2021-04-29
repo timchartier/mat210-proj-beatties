@@ -18,6 +18,12 @@ def run():
     st.markdown("""
     This page takes a look through at four selected variables spanning over time.
     "In these charts below, note that the NPAs are ordered to roughly mirror their geographical positions from north to south along Beatties Ford Road."
+
+    Reminder: As defined by the [Quality of Life Study](https://mcmap.org/qol/#15/):
+
+    > *Neighborhood Profile Areas (NPAs) are geographic areas used for the organization and presentation of data in the Quality of Life Study.
+    The boundaries were developed with community input and are based on one or more Census block groups.*
+
     """)
 
     DATA_FILE = os.path.join(os.path.dirname(__file__),'../qol-data/master.pkl')
