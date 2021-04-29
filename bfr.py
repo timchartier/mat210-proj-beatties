@@ -17,10 +17,10 @@ PAGES = {
     'Home': home,
     'Journey Down Beatties Ford Road': journey,
     'Clustering': clustering,
-    'Beatties': beatties,
+    # 'Beatties': beatties,
     'Data Over Time' : history,
     # 'Demographics over Time': raceOverTime,
-    'Evictions': evictions
+    # 'Evictions': evictions
 }
 st.sidebar.markdown('## Page Navigation')
 selectedPage = st.sidebar.radio(

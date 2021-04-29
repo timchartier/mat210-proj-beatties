@@ -12,10 +12,6 @@ def run():
     
     st.title('Beatties Ford Road Project')
 
-
-    st.video('https://youtu.be/-4C9mGXIc7s')
-
-
     grocery = pd.read_csv('./grocery-data/Grocery_Stores.csv')
     grocery = grocery.rename(columns={'X': 'longitude', 'Y': 'latitude'})
     grocery = grocery[['longitude', 'latitude', 'Name']]
