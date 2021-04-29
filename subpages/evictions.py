@@ -29,9 +29,13 @@ def run():
     # # geo = pd.read_csv('./eviction-lab-data/meckBlockGroups.csv')
     # # geo['GEOID'] = geo['GEOID'].astype(str)
     # # combined = pd.merge(df,geo,on="GEOID",how="left")
-    # geo.to_pickle('./eviction-lab-data/meckBlockGroups.pkl')
+    # # geo.to_pickle('./eviction-lab-data/meckBlockGroups.pkl')
+    # geo.to_csv('./eviction-lab-data/meckBlockGroups.csv',index=False)
 
-    geo = pd.read_pickle('./eviction-lab-data/meckBlockGroups.pkl')
+    # geo = pd.read_pickle('./eviction-lab-data/meckBlockGroups.pkl')
+    geo = pd.read_csv('./eviction-lab-data/meckBlockGroups.csv')
+    geo['GEOID'] = geo['GEOID'].astype(str)
+    geo.loc[:,'coordinates'] = geo.loc[:,'coordinates'].apply(lambda x: eval(x))
 
     block_group_layer = mapping.generateNPALayer(geo,variable_fill=False)
 
