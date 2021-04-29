@@ -19,9 +19,15 @@ def run():
     st.write('**Sights along Beatties Ford Road from North to South**')
     st.write('\n')
     st.write('As Beatties Ford runs from Huntersville to West Charlotte, the sights along the way are not uniform. Housing quality, racial demographics of neighborhoods, and the prevalence of fast food chains begin to shift as the road travels south. Before using the data collected on various socioeconomic indicators for different areas along the road and in different time periods, let us first journey down the road and examine the sights that are seen on the way.')
-    st.write('The Quality of Life Explorer divides Mecklenburg County into NPAs, or Neighborhood Profile Areas, for its spatial visualization of the included variables. As defined on the Explorer’s site:')
-    st.write('\n')
-    st.write('_Neighborhood Profile Areas (NPAs) are geographic areas used for the organization and presentation of data in the Quality of Life Study. The boundaries were developed with community input and are based on one or more Census block groups. (QOL)_')
+    st.write('The Quality of Life Explorer divides Mecklenburg County into NPAs, or Neighborhood Profile Areas, for its spatial visualization of the included variables.')
+    st.markdown("""
+    
+    As defined by the [Quality of Life Study](https://mcmap.org/qol/#15/):
+
+    > *Neighborhood Profile Areas (NPAs) are geographic areas used for the organization and presentation of data in the Quality of Life Study.
+    The boundaries were developed with community input and are based on one or more Census block groups.*
+
+    """)
     st.write('\n')
     st.write('As we visualize a drive down Beatties Ford Road, different sights will be marked by which NPA they are in, and will be ordered from north to south. Not all locations will be directly on Beatties Ford Road, but in the same NPA or nearby. The NPAs that Beatties Ford Road runs through are shown in the map below:')
     jsonData = json.load(open('./qol-data/npa.json'))
@@ -150,7 +156,7 @@ def run():
     with col18:
         st.write('**NPA 385**')
         st.write(' ')
-        st.write('Streetview of Charlotte Village Mobile Home. Another trailer park in the area, NPA 385 is southwest of NPA 123')
+        st.write('Streetview of Charlotte Village Mobile Home. Another trailer park in the area, NPA 385 is southwest of NPA 123.')
     
     col19, col20 = st.beta_columns(2)
     with col20:
@@ -182,7 +188,7 @@ def run():
     with col26:
         st.write('**NPA 347**')
         st.write(' ')
-        st.write("Blue Blaze Brewery. Now that we're closer to Charlotte,note the difference in surrounding restaurants.")
+        st.write("Blue Blaze Brewery. Now that we're closer to Charlotte, note the difference in surrounding restaurants.")
     col27, col28 = st.beta_columns(2)
     
     with col28:
