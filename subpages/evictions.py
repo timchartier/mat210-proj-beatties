@@ -33,10 +33,7 @@ def run():
 
     geo = pd.read_pickle('./eviction-lab-data/meckBlockGroups.pkl')
 
-
     block_group_layer = mapping.generateNPALayer(geo,variable_fill=False)
-
-    beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
 
     road_layer = mapping.generateRoadLayer()
 

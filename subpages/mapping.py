@@ -2,7 +2,7 @@ import pydeck as pdk
 from pydeck.types import String
 import streamlit as st
 
-@st.cache
+# @st.cache
 def generateNPALayer(data_frame, variable_fill=True,variable_name="fill_color",uniform_fill=[0,0,0,0],pickable=True):
     """
     Arguments:
@@ -33,7 +33,7 @@ def generateNPALayer(data_frame, variable_fill=True,variable_name="fill_color",u
         auto_highlight=True
     )
 
-@st.cache
+# @st.cache
 def generateNPALabelsLayer(label_file):
     """
         Generates Layer for NPA number labels at the average lng-lat for each NPA.
@@ -55,7 +55,7 @@ def generateNPALabelsLayer(label_file):
         get_alignment_baseline=String("center")
     )
 
-@st.cache
+# @st.cache
 def generateRoadLayer():
     """
         No arguments here. Just generates layer for Beatties Ford Road highlighted in Blue.
@@ -74,7 +74,7 @@ def generateRoadLayer():
     )
 
 defaultTooltip = {"html": "<b>NPA:</b> {NPA}"}
-@st.cache
+# @st.cache
 def createDeck(layers,showTooltip=True,tooltip=defaultTooltip):
     """
     Creates the "Deck" object to be passed into st.pydeck_chart()
