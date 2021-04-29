@@ -13,6 +13,7 @@ from PIL import Image
 import json
 import pydeck as pdk
 from pydeck.types import String
+from . import mapping
 def run():
     st.title('Visuals')
     st.write("Visuals along Beatties Ford Road from North to South")
@@ -39,6 +40,8 @@ def run():
         pickable=True,
         auto_highlight=True
     )
+
+    road_layer = mapping.generateRoadLayer()
     
     labels = pd.read_csv('./qol-data/NPA_Labels.csv')
     labels['NPA_str'] = labels['NPA_str'].astype(str)
@@ -63,7 +66,7 @@ def run():
     
     deck = pdk.Deck(
         map_style='mapbox://styles/mapbox/streets-v11',
-        layers=[npa_layer,label_layer],
+        layers=[npa_layer,label_layer,road_layer],
         initial_view_state=view_state,
         tooltip=tooltip)
     st.pydeck_chart(deck)
