@@ -1,21 +1,17 @@
 # Module imports
-# from altair.vegalite.v4.api import value
-from sklearn import cluster
 from sklearn.utils.validation import column_or_1d
 import streamlit as st
-import plotly.express as px
+# import plotly.express as px
 # import plotly.figure_factory as ff
 # import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
+# import numpy as np
 import json
 import os
 from sklearn.preprocessing import normalize
 from sklearn.cluster import KMeans
-import pydeck as pdk
-from pydeck.types import String
 import math
-
+from . import mapping
 
 def run():
     with st.beta_container():
@@ -166,58 +162,16 @@ def run():
         summary = summary.style.apply(getSummaryColor, axis=1)
         st.write(summary)
 
-        # for cluster in range(numberOfClusters):
-        #     st.markdown('### Cluster {}'.format(cluster+1))
-        #     st.text(
-        #         "NPA: " + str(list(master[master['cluster'] == cluster+1]['NPA'])))
-
-        view_state = pdk.ViewState(
-            **{"latitude": 35.33, "longitude": -80.89, "zoom": 10.50, "maxZoom": 22, "pitch": 0, "bearing": 0}
-        )
         # st.write(df2)
 
-        # URL for Beatties Ford Road shape
-        beattiesGeoJson = "https://raw.githubusercontent.com/wesmith4/mat210-proj-beatties/main/beatties.geojson"
 
-        # Create pydeck layer for NPAs filled according to their clusters
-        polygon_layer = pdk.Layer(
-            "PolygonLayer",
-            df2,
-            opacity=0.8,
-            stroked=True,
-            get_polygon="coordinates",
-            filled=True,
-            extruded=False,
-            wireframe=True,
-            get_fill_color="fill_color",
-            get_line_color=[0, 0, 0],
-            lineWidthMinPixels=1,
-            auto_highlight=True,
-            pickable=True,
-        )
+        polygon_layer = mapping.generateNPALayer(df2,variable_fill=True,variable_name="fill_color")
 
-        # Create layer to show the Beatties Ford Road shape
-        road_layer = pdk.Layer(
-            'GeoJsonLayer',
-            data=beattiesGeoJson,
-            filled=True,
-            pickable=False,
-            lineWidthMinPixels=3,
-            get_line_color=[0,0,200],
-            opacity=1,
-            id='beatties-ford-road',
-            use_binary_transport=False,
-            extruded=True
-        )
+        road_layer = mapping.generateRoadLayer()
 
         tooltip = {"html": "<b>NPA:</b> {NPA} <br /><b>{cluster_tooltip}</b>"}
 
-        deck = pdk.Deck(
-            layers=[polygon_layer, road_layer],
-            map_style='mapbox://styles/mapbox/streets-v11',
-            initial_view_state=view_state,
-            tooltip=tooltip
-        )
+        deck = mapping.createDeck(layers=[polygon_layer,road_layer],showTooltip=True,tooltip=tooltip)
 
         descriptions = {
             'None': {
@@ -301,47 +255,16 @@ def run():
             # NPA_Labels.to_csv('./qol-data/NPA_Labels.csv',index=False)
 
             NPA_Labels = pd.read_csv('./qol-data/NPA_Labels.csv')
-            NPA_Labels['NPA_str'] = NPA_Labels['NPA_str'].astype(str)
-    #         st.write(NPA_Labels.dtypes)
 
+            variable_layer = mapping.generateNPALayer(dataForMap)
 
-            variable_layer = pdk.Layer(
-                'PolygonLayer',
-                data=dataForMap,
-                filled=True,
-                extruded=False,
-                get_fill_color="fill_color",
-                get_polygon="coordinates",
-                get_line_color=[0,0,0],
-                lineWidthMinPixels=1,
-                pickable=True,
-                auto_highlight=True
-            )
-
-            npa_label_layer = pdk.Layer(
-                'TextLayer',
-                data=NPA_Labels,
-                id='label',
-                pickable=False,
-                get_size=16,
-                get_color=[1, 1, 1],
-                get_position=['longitude','latitude'],
-                get_text="NPA_str",
-                get_angle=0,
-                get_text_anchor=String("middle"),
-                get_alignment_baseline=String("center")
-            )
+            npa_label_layer = mapping.generateNPALabelsLayer(NPA_Labels)
 
             tooltip2 = {
                 "html": "<b>NPA: {NPA}</b><br><b>{tooltip_text}"
             }
 
-            deck2 = pdk.Deck(
-                map_style='mapbox://styles/mapbox/streets-v11',
-                layers=[variable_layer,road_layer,npa_label_layer],
-                initial_view_state=view_state,
-                tooltip=tooltip2
-            )
+            deck2 = mapping.createDeck(layers=[variable_layer,npa_label_layer,road_layer],tooltip=tooltip2)
             st.pydeck_chart(deck2)
 
 
