@@ -162,6 +162,10 @@ def run():
     with col13:     
         st.image(Image.open('images/7house.png'))
     with col14:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 280**')
         st.write(' ')
         st.write('Streetview of Countrywoods Mobile Home Park. The number of mobile homes increases as we travel more south; the particular park is in NPA 280, southeast of NPA 209.')
