@@ -82,7 +82,7 @@ def run():
                 index=1
             )
         clusteringFields = st.multiselect(label='Or, select specific fields for clustering (or modify the presets!)',
-                                            options=list(usableData.columns),
+                                            options=list(usableData.drop(columns=['Area','Area.1']).columns),
                                             format_func=lambda x: x.replace(
                                                 '_', ' '),
                                             default=variablePresets[whichPreset],

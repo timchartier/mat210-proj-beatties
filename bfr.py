@@ -8,6 +8,7 @@ import subpages.raceOverTime as raceOverTime
 import subpages.evictions as evictions
 import subpages.testing as journey
 import subpages.quick_history as history
+import subpages.googleMap as googleMap
 # This is the master file for the Beatties Ford Road dashboard
 st.set_page_config(page_title="Beatties Ford Road", layout="wide")
 
@@ -15,12 +16,13 @@ st.set_page_config(page_title="Beatties Ford Road", layout="wide")
 PAGES = {
     # dict of pages here
     'Home': home,
-    'Journey Down Beatties Ford Road': journey,
-    'Clusters of Neighborhoods': clustering,
+    'Journey down Beatties Ford Road': journey,
+    'Clusters of neighborhoods': clustering,
     # 'Beatties': beatties,
-    'Data Over Time' : history,
+    'Beatties Ford Road over time' : history,
     # 'Demographics over Time': raceOverTime,
-    # 'Evictions': evictions
+    # 'Evictions': evictions,
+    "Annotated Google Map": googleMap
 }
 st.sidebar.markdown('## Page Navigation')
 selectedPage = st.sidebar.radio(

@@ -27,10 +27,20 @@ def run():
     """)
 
     DATA_FILE = os.path.join(os.path.dirname(__file__),'../qol-data/master.pkl')
+    LOOKUP_FILE = os.path.join(os.path.dirname(__file__),'../qol-data/variableLookup.csv')
+    METADATA_FILE = os.path.join(os.path.dirname(__file__),'../qol-data/csvFiles/metadata.csv')
 
     # master = pd.read_pickle('./qol-data/master.pkl')
     master = pd.read_pickle(DATA_FILE)
     master.columns = master.columns.str.replace(' ','')
+    variableLookup = pd.read_csv(LOOKUP_FILE)
+    metadata = pd.read_csv(METADATA_FILE)
+
+    def showVariableDescription(long_name):
+        varCode = variableLookup[variableLookup['name'] == long_name]['code'].values[0]
+        description = metadata[metadata['Short _Name'] == varCode]['Long_Description'].values[0]
+        with st.beta_expander("Variable description",expanded=True):
+            st.write('*{}*'.format(description))
     # Construct dataframe for population by race
 
 #sales price/value graphs
@@ -58,6 +68,7 @@ def run():
 
         hp_graphs[year] = fig
     st.markdown('## Average Housing Prices by NPA over time')
+    showVariableDescription("Home_Sales_Price_2015")
     hp_col1,hp_col2= st.beta_columns([1,1])
     hp_col1.plotly_chart(hp_graphs['2013'],use_container_width=True)
     hp_col2.plotly_chart(hp_graphs['2015'],use_container_width=True)
@@ -79,7 +90,7 @@ def run():
             'Household Income'], value_name="hh_inc")
 
         fig = px.bar(melted, y="order", x="hh_inc", 
-                    orientation="h", labels=dict(order="NPA", hh_inc="Household Income"), title="Average Household Income for {}".format(year))
+                    orientation="h", labels=dict(order="NPA", hh_inc="Household Income"), title="Average Household Income ({})".format(year))
         fig.update_yaxes(autorange="reversed",
                         ticktext=data.NPA.tolist(), tickvals=data.order.to_list())
         fig.update_layout(legend=dict(
@@ -92,6 +103,7 @@ def run():
 
         hi_graphs[year] = fig
     st.markdown('## Average Household Income per NPA over Time')
+    showVariableDescription("Household_Income_2018")
     hi_col1,hi_col2 = st.beta_columns([1,1])
     hi_col1.plotly_chart(hi_graphs['2017'],use_container_width=True)
     hi_col2.plotly_chart(hi_graphs['2018'],use_container_width=True)
@@ -100,6 +112,43 @@ def run():
         st.markdown("""
         FILL WITH ANALYSIS OF RESULTS
         """)
+
+# Public nutrition assistance
+
+    pn_graphs = {}
+    for year in ['2011','2015','2018']:
+        data = master.loc[:,['NPA', 'order', 'Public_Nutrition_Assistance_{}'.format(year)]]
+        data.columns = ['NPA', 'order', 'Public Nutrition Assistance']
+        data.loc[:,['Public Nutrition Assistance']] = data[['Public Nutrition Assistance']].astype(float)
+
+        melted = pd.melt(data, id_vars=['NPA', 'order'], value_vars=[
+            'Public Nutrition Assistance'], value_name="pn_ast")
+
+        fig = px.bar(melted, y="order", x="pn_ast", 
+                    orientation="h", labels=dict(order="NPA", pn_ast="Public Nutrition Assistance"), title="Public Nutrition Assistance ({})".format(year))
+        fig.update_yaxes(autorange="reversed",
+                        ticktext=data.NPA.tolist(), tickvals=data.order.to_list())
+        fig.update_layout(legend=dict(
+            yanchor="top",
+            y=-.2,
+            xanchor="left",
+            x=0.01,
+            orientation='h'
+        ))
+
+        pn_graphs[year] = fig
+    st.markdown('## Public Nutrition Assistance by NPA over Time')
+    showVariableDescription("Public_Nutrition_Assistance_2018")
+    pn_col1,pn_col2,pn_col3 = st.beta_columns([1,1,1])
+    pn_col1.plotly_chart(pn_graphs['2011'],use_container_width=True)
+    pn_col2.plotly_chart(pn_graphs['2015'],use_container_width=True)
+    pn_col3.plotly_chart(pn_graphs['2018'],use_container_width=True)
+
+    with st.beta_container():
+        st.markdown("""
+        FILL WITH ANALYSIS OF RESULTS
+        """)
+
 
 
 #employment rate
@@ -113,7 +162,7 @@ def run():
             'Employment Rate'], value_name="e_rate")
 
         fig = px.bar(melted, y="order", x="e_rate",
-                    orientation="h", labels=dict(order="NPA", e_rate="Employment Rate"), title="Employment Rate for {}".format(year))
+                    orientation="h", labels=dict(order="NPA", e_rate="Employment Rate"), title="Employment Rate ({})".format(year))
         fig.update_yaxes(autorange="reversed",
                         ticktext=data.NPA.tolist(), tickvals=data.order.to_list())
         fig.update_layout(legend=dict(
@@ -126,6 +175,7 @@ def run():
 
         er_graphs[year] = fig
     st.markdown('## Employment Rates per NPA Region over Time')
+    showVariableDescription("Employment_Rate_2018")
     er_col1,er_col2 = st.beta_columns([1,1])
     er_col1.plotly_chart(er_graphs['2017'],use_container_width=True)
     er_col2.plotly_chart(er_graphs['2018'],use_container_width=True)
