@@ -230,7 +230,9 @@ def run():
             },
             'Environment': {
                 'description': """
-                    
+                    The learnings from this clustering largely may be observed with a glance at the satellite map of the area (take a look at the Annotated Google Map) – as expected when comparing urban areas with suburban or rural areas, the clusters closer to downtown show a lesser extent of tree canopy than the clusters farther north
+
+                    Logically, these clusters closer to urban Charlotte also have higher average values for the percent of land area classified as "impervious surface," as indicated by the `Impervious_Surface_2018` variable.
                 """
             },
             'Housing': {
@@ -243,7 +245,12 @@ def run():
                 """
             },
             'Crime': {
-                'description': ''
+                'description': """
+                    Observing these clusterings acccording to crime-related variables, we can discern that the common assumption of a greater magnitude of crime occurring as one nears an urban area holds true in this case, with some degree of nuance. Regardless of the number of clusters used here, there is a large cluster of NPAs in the northern section that has significant lower average crime rates than the rest of the clusters. 
+
+                    Interestingly, we observe that the NPAs right at the end of Beatties Ford road, around Johnson C. Smith University show lower rates of crime than those just to the north, which goes against the mentioned assumption. When creating 5 clusters for these variables, we can see that the two clusters with the highest property and violent crime rates are single NPAs – 70 and 374 – which include West Charlotte High School and Lincoln Heights Neighborhood Park, respectively.
+
+                """
             }
         }
 
