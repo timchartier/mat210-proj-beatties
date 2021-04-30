@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as comps
 def run():
 
-    st.sidebar.write("(Close this sidebar to view the whole map)")
+    st.sidebar.write("*Close this sidebar to view the whole map*")
     col1,col2,col3 = st.beta_columns([1,5,1])
     with col2:
         st.title("Annotated Google Map")

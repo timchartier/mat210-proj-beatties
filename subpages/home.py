@@ -6,7 +6,7 @@ def run():
     with col2:
         st.title("Disparities and Gentrification along Beatties Ford Road")
         st.write("""
-        Final project by [Manny Abiad](https://www.linkedin.com/in/jose-manny-abiad-160888170/), [Liam Carriker](https://www.linkedin.com/in/liam-carriker-a9b40a156/), and [Will Smith](https://linkedin.com/in/williamesmithiv)
+        [Manny Abiad](https://www.linkedin.com/in/jose-manny-abiad-160888170/), [Liam Carriker](https://www.linkedin.com/in/liam-carriker-a9b40a156/), and [Will Smith](https://linkedin.com/in/williamesmithiv) (all Davidson College Class of 2021)
 
         **MAT210:** Math Modeling :bar_chart:
 

@@ -15,7 +15,7 @@ from . import mapping
 
 def run():
     with st.beta_container():
-        st.title('Clustering neighborhoods along Beatties Ford Road')
+        st.title('Clusters of neighborhoods along Beatties Ford Road')
     st.markdown("""
 
     In this project, we use an export from the Charlotte-Mecklenburg Quality of Life Explorer (QOL) as our primary dataset for the mathematical analyses and visualizations in the dashboard. This online tool, available at https://mcmap.org/qol/, is an excellent asset on its own, enabling comparison of its large selection of variables over the map of Mecklenburg County. The QOL Explorer divides Mecklenburg County into NPAs, or Neighborhood Profile Areas, for its spatial visualization of the included variables. As defined on the Explorer’s site:
@@ -190,7 +190,11 @@ def run():
             },
             'Income, Economic': {
                 'description': """
+                    It is apparent with these clusterings that residents of the NPAs farther north experience greater degrees economic privilege than those closer to downtown Charlotte. 
 
+                    When we use two clusters, we see a north-south split similar to that observed in the clustering according to racial composition. When observing how the NPAs are separated into 5 clusters, we notice that the `Household_Income_2018` variable quite obviously declines in progression from north to south along the road.
+
+                    You will notice in various clusterings that the pair of NPAs 421 and 447 consistently appear in the most privileged clusters.
                 """
             },
             'Education': {
@@ -203,19 +207,40 @@ def run():
                 """
             },
             'Health Resources Proximity': {
-                'description':''
+                'description':"""
+                    This set of variables does not yield clusters as "clean" or informative as in some of the other sets. 
+                    
+                    This is likely due to the fact that the values of these "proximity" variables may be determined in one part by a collection of demographic/economic factors as we have discussed, and in another part by the NPA's proximity to the urban center of Charlotte, where a greater concentration of resources is to be expected.
+                """
             },
             'Transportation': {
-                'description': ''
+                'description': """
+                    Observing the clusters produced by this set, we may assert that the proximity to Charlotte's downtown has the most impact on the values for these variables.
+
+                    These clusters do provide valuable insight to the transportation-related structures and resources available to residents in these NPAs - for example, those living in Cluster 1 according to the 3-cluster map have great access to public transit, and benefit from relative ease of navigating their areas on foot compared to the other clusters.
+                """
             },
             'Engagement': {
-                'description': ''
+                'description': """
+                    From these clustering results, the biggest takeaways are the relatively higher participation in arts and culture activities by the residents of the clusters farther north on the map compared to the clusters closer to downtown, as well as these clusters' relatively higher voter participation rates. 
+                    
+                    These statistics may be indicators of greater connectivity in these clusters' communities or greater agency or availability of disposable time to participate in such activities.
+
+                """
             },
             'Environment': {
-                'description': ''
+                'description': """
+                    
+                """
             },
             'Housing': {
-                'description': ''
+                'description': """
+                    Observing the division of NPAs into clusters according to these variables provides insight into the different kinds of residential circumstances that are present in each area. In this case, using 4 or 5 clusters gives more interpretable visualization.
+
+                    Regarding spatial and aesthetic variables, we can observe that clusters near the downtown area have much greater density of housing units in their land area than do the clusters farther north along the road, and in general these housing units are smaller. This is consistent with expectations for urban density compared with surrounding suburbs and more rural areas.
+
+                    We also find that residents in the NPAs in the clusters closer to Huntersville own their homes at a greater rate relative to other clusters, and these homes are more valuable (as measured by average Home Sales Price).
+                """
             },
             'Crime': {
                 'description': ''
@@ -275,6 +300,9 @@ def run():
 
             deck2 = mapping.createDeck(layers=[variable_layer,npa_label_layer,road_layer],tooltip=tooltip2)
             st.pydeck_chart(deck2)
+            st.write("""
+            In this map above, greater opacities of the shading of NPAs signify greater values for the selected `{}` variable.
+            """.format(variableToView))
 
 
 if __name__ == "__main__":
