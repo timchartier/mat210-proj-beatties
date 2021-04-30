@@ -23,6 +23,8 @@ def run():
     The boundaries were developed with community input and are based on one or more Census block groups.* (QOL)
 
     In our use of this data, we narrow the scope to the Neighborhood Profile Areas surrounding Beatties Ford Road, which we separate into "clusters" based on a mathematical method known as [*k-means clustering*](https://towardsdatascience.com/understanding-k-means-clustering-in-machine-learning-6a6e67336aa1), using curated sets of characteristics or characteristics of your choosing. Interpreting the clusters as presented in the map and data frame below, we assert that NPAs in the **same cluster** share **similar characteristics**, while NPAs in **different clusters** have **dissimilar characteristics**.
+
+    Try clustering the NPAs according to the presets available in the dropdown list, but also experiment with your own selection of variables! Observing how certain clusterings are similar or different can provide exceptional insight into correlations between demographic, economic, educational, and many other kinds of factors.
     """)
 
     # Read in master data frame from pickle file
@@ -182,6 +184,8 @@ def run():
                     Considering this map, notice especially the great degree of polarity between the `White_Population_2017` and `Black_Population_2017` averages for the displayed clusters (these are percents of the total population). 
                     
                     When we construct 2 clusters of these NPAs, we observe quite a clean geographic break between a northern section and a southern section of the area along Beatties Ford Road, with large differences between these clusters' average racial composition. As we change this number to 3, 4, or 5 clusters, we identify smaller, more specific areas with even greater racial uniformity.
+
+                    Additionally, try comparing the two-cluster map using these variables with the two-cluster map using the variables for "Household Income 2017" and "Home Sales Price 2015." The similarity is quite striking.
                 """
             },
             'Income, Economic': {
