@@ -18,7 +18,7 @@ def run():
         st.title('Clustering neighborhoods along Beatties Ford Road')
     st.markdown("""
 
-    For the data visualizations on this dashboard, we use an export from the Charlotte-Mecklenburg Quality of Life Explorer (QOL) as our primary dataset for the mathematical analyses and visualizations in the dashboard. This online tool, available at https://mcmap.org/qol/, is an excellent asset on its own, enabling comparison of its large selection of variables over the map of Mecklenburg County. The QOL Explorer divides Mecklenburg County into NPAs, or Neighborhood Profile Areas, for its spatial visualization of the included variables. As defined on the Explorer’s site:
+    In this project, we use an export from the Charlotte-Mecklenburg Quality of Life Explorer (QOL) as our primary dataset for the mathematical analyses and visualizations in the dashboard. This online tool, available at https://mcmap.org/qol/, is an excellent asset on its own, enabling comparison of its large selection of variables over the map of Mecklenburg County. The QOL Explorer divides Mecklenburg County into NPAs, or Neighborhood Profile Areas, for its spatial visualization of the included variables. As defined on the Explorer’s site:
     > *Neighborhood Profile Areas (NPAs) are geographic areas used for the organization and presentation of data in the Quality of Life Study.
     The boundaries were developed with community input and are based on one or more Census block groups.* (QOL)
 
@@ -68,7 +68,7 @@ def run():
         'Transportation': ['Long_Commute_2018','Bicycle_Friendliness_2018','Street_Connectivity_2018','Sidewalk_Availability_2015','Transit_Proximity_2018'],
         'Engagement':['Arts_Participation_2013','311_Requests_2016','Voter_Participation_2018',],
         'Environment':['Tree_Canopy_2012','Residential_Tree_Canopy_2012','Impervious_Surface_2018','Natural_Gas_Consumption_2013','Water_Consumption_2018','Commuters_Driving_Alone_2018',],
-        'Housing':['Housing_Density_2019','Single_Family_Housing_2019','Housing_Size_2019','Housing_Age_2019','Rental_Houses_2018','New_Residential_2018','Residential_Renovation_2018','Home_Sales_Price_2015','Home_Ownership_2018','Residential_Occupancy_2018','Rental_Houses_2017',],
+        'Housing':['Housing_Density_2019','Single_Family_Housing_2019','Housing_Size_2019','Housing_Age_2019','Rental_Houses_2018','New_Residential_2018','Residential_Renovation_2018','Home_Sales_Price_2015','Home_Ownership_2018','Residential_Occupancy_2018',],
         'Crime':['Violent_Crime_Rate_2018','Property_Crime_Rate_2018','Disorder_Call_Rate_2018',]
     }
 
