@@ -5,7 +5,7 @@ def run():
     st.sidebar.write("(Close this sidebar to view the whole map)")
     col1,col2,col3 = st.beta_columns([1,5,1])
     with col2:
-        st.title("Annoted Google Map")
+        st.title("Annotated Google Map")
 
 
         st.markdown("""
