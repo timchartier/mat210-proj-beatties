@@ -90,6 +90,10 @@ def run():
     with col1:
         st.image(Image.open('images/1house.png'))
     with col2:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 450**')
         st.write(' ')
         st.write('House on Savannah Grace Lane.')
@@ -99,6 +103,10 @@ def run():
     with col4:
         st.image(Image.open('images/2school.png'))
     with col3:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 450**')
         st.write(' ')
         st.write('Front of Francis Bradley Middle School.') 
@@ -106,6 +114,10 @@ def run():
     with col5:
         st.image(Image.open('images/3school.png'))
     with col6:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 447**')
         st.write(' ')
         st.write('View of Community School of Davidson.')
@@ -114,6 +126,10 @@ def run():
     with col8:
         st.image(Image.open('images/4house.png'))
     with col7:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 447**')
         st.write(' ')
         st.write('House along Carrington Ridge Drive.')
@@ -122,6 +138,10 @@ def run():
     with col9:  
         st.image(Image.open('images/5house.png'))
     with col10:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 447**')
         st.write(' ')
         st.write('House along Mclothian Lane.')
@@ -130,6 +150,10 @@ def run():
     with col12:
         st.image(Image.open('images/6house.png'))
     with col11:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 209**')
         st.write(' ')
         st.write('Streetview of Davis Meadows Drive.')
@@ -146,6 +170,10 @@ def run():
     with col16:
         st.image(Image.open('images/9store.jpg'))
     with col15:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 123**')
         st.write(' ')
         st.write("Storefront of Firestone-Garden Park. The number of fast food restaurants such as Little Caesar's is also increasing.")
@@ -154,6 +182,10 @@ def run():
     with col17:
         st.image(Image.open('images/10house.png'))
     with col18:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 385**')
         st.write(' ')
         st.write('Streetview of Charlotte Village Mobile Home. Another trailer park in the area, NPA 385 is southwest of NPA 123.')
@@ -162,6 +194,10 @@ def run():
     with col20:
         st.image(Image.open('images/11house.png'))
     with col19:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 374**')
         st.write(' ')
         st.write('Lincoln Heights made headlines in June 2020 after a shooting occurred in the area.')
@@ -170,6 +206,10 @@ def run():
     with col21:
         st.image(Image.open('images/12mem.jpg'))
     with col22:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 374**')
         st.write(' ')
         st.write('A memorial for the victims of the June 22nd, 2020 shooting. The incident occurred near the intersection of Beatties Ford Road and Catherine Simmons Avenue.')
@@ -178,14 +218,22 @@ def run():
     with col24:
         st.image(Image.open('images/13house.png'))
     with col23:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 85**')
         st.write(' ')
-        st.write('Washington Heights is one of the neighborhoods int he area with a historic past. It was made as a neighborhood for the rising Black middle-class in the early 20th century.')
+        st.write('Washington Heights is one of the neighborhoods in the area with a historic past. It was made as a neighborhood for the rising Black middle-class in the early 20th century.')
     
     col25, col26 = st.beta_columns(2)
     with col25:
         st.image(Image.open('images/14brew.png'))
     with col26:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 347**')
         st.write(' ')
         st.write("Blue Blaze Brewery. Now that we're closer to Charlotte, note the difference in surrounding restaurants.")
@@ -194,6 +242,10 @@ def run():
     with col28:
         st.image(Image.open('images/16brew.png'))
     with col27:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 340**')
         st.write(' ')
         st.write('VBGB Beer Hall and Garden.')
@@ -202,6 +254,10 @@ def run():
     with col29:
         st.image(Image.open('images/15brew.png'))
     with col30:
+        st.markdown("""
+        #
+        # 
+        ## """)
         st.write('**NPA 340**')
         st.write(' ')
         st.write('Storefront of VBGB Beer Hall and Garden - now, at the end of Beatties Ford Road, the surrounding area is starting to look like how much of West Charlotte does.')

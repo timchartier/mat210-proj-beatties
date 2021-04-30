@@ -9,11 +9,14 @@ def run():
         Final project by [Manny Abiad](https://www.linkedin.com/in/jose-manny-abiad-160888170/), [Liam Carriker](https://www.linkedin.com/in/liam-carriker-a9b40a156/), and [Will Smith](https://linkedin.com/in/williamesmithiv)
 
         **MAT210:** Math Modeling :bar_chart:
-        
-        [Dr. Tim Chartier](https://www.davidson.edu/people/tim-chartier), Spring 2021
+
+        Spring 2021
 
         [**Davidson College**](https://davidson.edu)
 
+        [Dr. Tim Chartier](https://www.davidson.edu/people/tim-chartier), Professor of Mathematics and Computer Science
+
+        [Dr. Joseph Ewoodzie, Jr.](https://www.davidson.edu/people/joseph-ewoodzie-jr), Professor of Sociology
         """)
 
         st.markdown("""
