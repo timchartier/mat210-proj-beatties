@@ -17,13 +17,12 @@ def run():
     with st.beta_container():
         st.title('Clustering neighborhoods along Beatties Ford Road')
     st.markdown("""
-    Here, we cluster Neighborhood Profile Areas (NPAs) according to characteristics of your choosing.
 
-    As defined by the [Quality of Life Study](https://mcmap.org/qol/#15/):
-
+    For the data visualizations on this dashboard, we use an export from the Charlotte-Mecklenburg Quality of Life Explorer (QOL) as our primary dataset for the mathematical analyses and visualizations in the dashboard. This online tool, available at https://mcmap.org/qol/, is an excellent asset on its own, enabling comparison of its large selection of variables over the map of Mecklenburg County. The QOL Explorer divides Mecklenburg County into NPAs, or Neighborhood Profile Areas, for its spatial visualization of the included variables. As defined on the Explorer’s site:
     > *Neighborhood Profile Areas (NPAs) are geographic areas used for the organization and presentation of data in the Quality of Life Study.
-    The boundaries were developed with community input and are based on one or more Census block groups.*
+    The boundaries were developed with community input and are based on one or more Census block groups.* (QOL)
 
+    In our use of this data, we narrow the scope to the Neighborhood Profile Areas surrounding Beatties Ford Road, which we separate into "clusters" based on a mathematical method known as [*k-means clustering*](https://towardsdatascience.com/understanding-k-means-clustering-in-machine-learning-6a6e67336aa1), using curated sets of characteristics or characteristics of your choosing. Interpreting the clusters as presented in the map and data frame below, we assert that NPAs in the **same cluster** share **similar characteristics**, while NPAs in **different clusters** have **dissimilar characteristics**.
     """)
 
     # Read in master data frame from pickle file
