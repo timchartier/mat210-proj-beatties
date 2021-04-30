@@ -110,7 +110,7 @@ def run():
 
     with st.beta_container():
         st.markdown("""
-        Looking at data taken from the recent years of 2017 and 2018, there is a clear consistent trend of Average Household Income decreasing as one moves further south on Beatties Ford Road. This steady trend does not match that of Average Housing Price, which while taken a couple years before, showed a consistent trend of sharply increasing in the south-most NPAs of Beatties Ford Road, supporting current evidence of gentrification in downtown Charlotte.
+        Looking at data taken from the recent years of 2017 and 2018, there is a clear consistent trend of Average Household Income decreasing as one moves further south on Beatties Ford Road. This steady trend does not match that of Average Housing Price, which while taken a couple years before, showed a consistent trend of sharply increasing in the south-most NPAs of Beatties Ford Road.
         """)
 
 # Public nutrition assistance
