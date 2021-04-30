@@ -75,7 +75,7 @@ def run():
 
     with st.beta_container():  #INSERT ANALYSIS
         st.markdown("""
-        FILL WITH ANALYSIS OF RESULTS
+        Looking at data taken from the years 2013 and 2015, we can see that the bar graphs trend similarly. Because NPAs are laid out with north-most NPAs higher on the y-axis and south-most NPAs lower, we can establish that average housing prices per NPA region remain higher in northern regions of Beatties Ford Road, and steadily decrease as the road progresses south-bound with a smaller jump in the most south-most NPA regions. 
         """)
     #insert rental costs from 2017-2018???
 
@@ -110,7 +110,7 @@ def run():
 
     with st.beta_container():
         st.markdown("""
-        FILL WITH ANALYSIS OF RESULTS
+        Looking at data taken from the recent years of 2017 and 2018, there is a clear consistent trend of Average Household Income decreasing as one moves further south on Beatties Ford Road. This steady trend does not match that of Average Housing Price, which while taken a couple years before, showed a consistent trend of sharply increasing in the south-most NPAs of Beatties Ford Road, supporting current evidence of gentrification in downtown Charlotte.
         """)
 
 # Public nutrition assistance
@@ -146,7 +146,7 @@ def run():
 
     with st.beta_container():
         st.markdown("""
-        FILL WITH ANALYSIS OF RESULTS
+        Data taken on inhabitants receiving nutritional assistance shows a clear trend between the years of 2011 and 2018. In each year, the percentage of NPA population receiving nutritional asssitance received steadily increasing the further south one is on Beatties Ford Road, indicating that the nutritional environment of an NPA region gets worse the further south the NPA is. 
         """)
 
 
@@ -182,7 +182,7 @@ def run():
 
     with st.beta_container():
         st.markdown("""
-        FILL WITH ANALYSIS OF RESULTS
+        Employment rates remain relatively steady throughought NPA regions between the years of 2017-2018, indicating relatively uniform employment rates across Beatties Ford Road.
         """)
 
 
@@ -222,7 +222,13 @@ def run():
 
     with st.beta_container():
         st.markdown("""
-        FILL WITH ANALYSIS OF RESULTS
+        Between the years of 2000 and 2018, we can observe that population in further out NPAs steadily increase, with the increasing population predominantly being white. It is also clear that the further south an NPA region is on Beatties Ford Road, the higher the percentage of population being black, with a smaller jump of population that is white increasing over time in the south-most NPAs of Beatties Ford.  
+        """)
+
+    with st.beta_container():
+        st.title('Conclusions')
+        st.markdown("""
+        Between all the graphs over time displayed, despite varying years, we can see trends that persist over time that correlate with the further south an NPA region is on Beatties Ford Road. Moving from north to south clearly correlates with lower housing prices, lower household income, higher prescence of nutritional assistance, and a shift from a higher percentage of population that is white to a higher percentage of population that is black. There are also remarkable reversal most of these trends in the south-most two to three NPA regions, which are regions closest to downtown Charlotte.
         """)
 
     
