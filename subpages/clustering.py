@@ -289,7 +289,7 @@ def run():
                 `{}`
                 
                 {}
-                """.format(variableToView, variableDescription))
+                """.format(variableToView, variableToViewDescription))
             from sklearn.preprocessing import minmax_scale
             dataForMap = master[['NPA',variableToView]]
             dataForMap = pd.merge(dataForMap,df2[['NPA','coordinates']],on="NPA",how="left")
