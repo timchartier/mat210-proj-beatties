@@ -78,7 +78,7 @@ def run():
 
     with st.beta_container():
         # Streamlit multiselect to pick fields for clustering; => Default ["White_Population_2020"]
-        col1, col2, col3 = st.beta_columns((4, 2,3))
+        col1, col2 = st.beta_columns((4, 2))
 
         with col1:
             whichPreset = st.selectbox(
@@ -92,8 +92,7 @@ def run():
                                                 '_', ' '),
                                             default=variablePresets[whichPreset],
                                             help="Choose from the dropdown, or type to search.")
-        with col3:
-            algorithm = st.selectbox("Clustering Algorithm",options=['KMeans','Hierarchical'],index=0)
+
         with st.beta_expander("Variable Descriptions",expanded=len(clusteringFields) > 0):
             for var in clusteringFields:
                 varCode = variableLookup[variableLookup['name'] == var]['code'].values[0]
@@ -118,19 +117,12 @@ def run():
         scaled = pd.DataFrame(scaled, columns=selectedData.columns)
 
         # st.write(selectedData)
-        if algorithm == 'KMeans':
-            kmeansClusters = KMeans(n_clusters=numberOfClusters, random_state=42)
-            kmeansClusters.fit(scaled)
 
-            master['cluster'] = kmeansClusters.labels_ + 1
-            master['cluster'] = master['cluster'].astype(int)
-            
-        elif algorithm == 'Hierarchical':
-            hierarchicalClusters = AgglomerativeClustering(n_clusters=numberOfClusters, affinity='euclidean', linkage='single')
-            hierarchicalClusters.fit_predict(scaled)
-            
-            master['cluster'] = hierarchicalClusters.labels_ + 1
-            master['cluster'] = master['cluster'].astype(int)
+        kmeansClusters = KMeans(n_clusters=numberOfClusters, random_state=42)
+        kmeansClusters.fit(scaled)
+
+        master['cluster'] = kmeansClusters.labels_ + 1
+        master['cluster'] = master['cluster'].astype(int)
 
         df2 = pd.DataFrame()
 
