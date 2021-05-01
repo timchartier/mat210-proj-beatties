@@ -34,6 +34,10 @@ def run():
 
     # Read in metadata lookup file
     variableLookup = pd.read_csv('./qol-data/variableLookup.csv')
+    
+    def getVariableDescription(long_name):
+        varCode = variableLookup[variableLookup['name'] == long_name]['code'].values[0]
+        return metadata[metadata['Short _Name'] == varCode]['Long_Description'].values[0]
 
     def formatChoice(x): return x.replace('_', ' ')
 
@@ -279,6 +283,13 @@ def run():
         with colY:
             st.markdown('### Visualize these variables individually by NPA')
             variableToView = st.selectbox(label="Variable",options=clusteringFields,key=0,format_func=lambda x: x.replace('_', ' '))
+            variableToViewDescription = getVariableDescription(variableToView)
+            with st.beta_expander("Variable Description",expanded=True):
+                st.markdown("""
+                `{}`
+                
+                {}
+                """.format(variableToView, variableDescription))
             from sklearn.preprocessing import minmax_scale
             dataForMap = master[['NPA',variableToView]]
             dataForMap = pd.merge(dataForMap,df2[['NPA','coordinates']],on="NPA",how="left")
