@@ -13,7 +13,8 @@ from PIL import Image
 import json
 import pydeck as pdk
 from pydeck.types import String
-from . import mapping
+import mapping
+
 def run():
     st.title('A Journey Down Beatties Ford Road')
     st.write('**Sights along Beatties Ford Road from North to South**')

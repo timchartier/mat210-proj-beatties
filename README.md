@@ -2,7 +2,9 @@
 
 MAT210 Spring 2021 Final Project - Beatties Ford Road
 
-Also at https://share.streamlit.io/wesmith4/mat210-proj-beatties/main/bfr.py.
+Deployed with Streamlit at https://share.streamlit.io/wesmith4/mat210-proj-beatties/main/bfr.py.
+
+bit.ly/beatties
 
 ## Notes for development
 
@@ -13,15 +15,20 @@ Also at https://share.streamlit.io/wesmith4/mat210-proj-beatties/main/bfr.py.
 
 _Instructions for bash terminal_
 
-1. Clone the repository to your desktop: 
+1. Clone the repository to your desktop:
+
 ```shell
 $ git clone https://github.com/wesmith4/mat210-proj-beatties.git
 ```
+
 2. Install the requirements:
+
 ```shell
 $ pip install -r requirements.txt
 ```
+
 3. Start a Streamlit development server:
+
 ```shell
 $ streamlit run FILE_NAME.py
 ```
@@ -31,3 +38,11 @@ $ streamlit run FILE_NAME.py
 [Getting Started](https://docs.streamlit.io/en/stable/getting_started.html)
 
 [API Reference](https://docs.streamlit.io/en/stable/api.html) (this will be the most useful)
+
+## Mapping module
+
+A few functions to simplify the process of mapping data onto the maps of NPAs or other geometries have been defined in the `mapping.py` file. To use these functions in your Python script, import this module at the top of the script:
+
+```python
+import mapping
+```

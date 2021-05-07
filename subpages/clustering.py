@@ -1,17 +1,13 @@
 # Module imports
-from sklearn.utils.validation import column_or_1d
 import streamlit as st
-# import plotly.express as px
-# import plotly.figure_factory as ff
-# import matplotlib.pyplot as plt
 import pandas as pd
 # import numpy as np
 import json
 import os
 from sklearn.preprocessing import normalize
-from sklearn.cluster import KMeans, AgglomerativeClustering
+from sklearn.cluster import KMeans
 import math
-from . import mapping
+import mapping
 
 def run():
     with st.beta_container():
